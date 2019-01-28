@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="55t7k88xERfdEg6G3LD_kVq4ZhIwTqrpDG6ae3QW96E">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="yY5pucysgo">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="深度学习,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Little Tail" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="GANGAN(Generative Adversarial Nets)简单的说GAN就是以下三点： （1）构建两个网络，一个G生成网络，一个D区分网络。两个网络的网络结构随意就好. （2）训练方式。G网络的loss是log(1-D(G(z))，而D的loss是-(log(D(x)) + log(1-D(G(z))) 注意这里并不是Cross Entropy。 （3）数据输入。G网络的输入是nois">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gan（1）：GAN">
+<meta property="og:url" content="http://xiabanle.me/archives/a5f2e45a.html">
+<meta property="og:site_name" content="Little Tail">
+<meta property="og:description" content="GANGAN(Generative Adversarial Nets)简单的说GAN就是以下三点： （1）构建两个网络，一个G生成网络，一个D区分网络。两个网络的网络结构随意就好. （2）训练方式。G网络的loss是log(1-D(G(z))，而D的loss是-(log(D(x)) + log(1-D(G(z))) 注意这里并不是Cross Entropy。 （3）数据输入。G网络的输入是nois">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-aab535a56ee0fabaa3d52998d1baf616_hd.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-211bf0f4c444ff1979f9cec5e92694a8_hd.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-85ff08e7331818336bb62a726296422a_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-cbf4d5b154f8581336b6833aabb11c7a_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-2ab49d09f4a4c13721c53215da2d3fb8_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-474c95074c3a448937b25a5103c8e9be_hd.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-adcecb22fd3a67b2e01cbba8d45c82bd_hd.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=I%28c%2C+G%28z%2C+c%29%29+%3D+%5Cmathbb%7BE%7D_%7Bc+%5Csim+P%28c%29%2C+x+%5Csim+G%28z%2C+c%29%7D+%5Cleft%5B+%5Clog+Q%28c+%5Cvert+X%29+%5Cright%5D+%2B+H%28c%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Cmin_%7BG%7D+%5Cmax_%7BD%7D+%5C%2C+V%28D%2C+G%29+-+%5Clambda+I%28c%2C+G%28z%2C+c%29%29">
+<meta property="og:updated_time" content="2019-01-28T15:42:56.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gan（1）：GAN">
+<meta name="twitter:description" content="GANGAN(Generative Adversarial Nets)简单的说GAN就是以下三点： （1）构建两个网络，一个G生成网络，一个D区分网络。两个网络的网络结构随意就好. （2）训练方式。G网络的loss是log(1-D(G(z))，而D的loss是-(log(D(x)) + log(1-D(G(z))) 注意这里并不是Cross Entropy。 （3）数据输入。G网络的输入是nois">
+<meta name="twitter:image" content="https://pic3.zhimg.com/80/v2-aab535a56ee0fabaa3d52998d1baf616_hd.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiabanle.me/archives/a5f2e45a.html">
+
+
+
+
+
+  <title>Gan（1）：GAN | Little Tail</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?0f0daeaed626293d9c84d4ebb98cb655";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Little Tail</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Berry's Blogs</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiabanle.me/archives/a5f2e45a.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Berry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Little Tail">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Gan（1）：GAN</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T10:09:02+00:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/archives/a5f2e45a.html" class="leancloud_visitors" data-flag-title="Gan（1）：GAN">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读量： </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,753
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h1><h2 id="GAN-Generative-Adversarial-Nets"><a href="#GAN-Generative-Adversarial-Nets" class="headerlink" title="GAN(Generative Adversarial Nets)"></a>GAN(Generative Adversarial Nets)</h2><p>简单的说GAN就是以下三点：</p>
+<p>（1）构建两个网络，一个G生成网络，一个D区分网络。两个网络的网络结构随意就好.</p>
+<p>（2）训练方式。G网络的loss是log(1-D(G(z))，而D的loss是-(log(D(x)) + log(1-D(G(z))) 注意这里并不是Cross Entropy。</p>
+<p>（3）数据输入。G网络的输入是noise。而D的输入则混合G的输出数据及样本数据</p>
+<h2 id="深入GAN"><a href="#深入GAN" class="headerlink" title="深入GAN"></a>深入GAN</h2><p>那么我们来分析一下这样的训练会产生什么情况？</p>
+<p>G网络的训练是希望D(G(z))趋近于1，这样G的loss就会最小。</p>
+<p>而D网络的训练就是一个2分类，目标是分清楚真实数据和生成数据，也就是希望真实数据的D输出趋近于1，而生成数据的输出即D(G(z))趋近于0。</p>
+<p>OK，这就是GAN两个网络相互对抗的本质。</p>
+<p>   那么，这样相互对抗会产生怎样的效果呢？Ian Goodfellow用一个简单的图来描述：<br>   <img src="https://pic3.zhimg.com/80/v2-aab535a56ee0fabaa3d52998d1baf616_hd.jpg" alt=""></p>
+<p>   我们也好好说一下上面这几个图。</p>
+<p>第一个图是一开始的情况，黑色的线表示数据x的实际分布，绿色的线表示数据的生成分布，我们希望绿色的线能够趋近于黑色的线，也就是让生成的数据分布与实际分布相同。</p>
+<p>然后蓝色的线表示生成的数据x对应于D的分布。</p>
+<p>在a图中，D还刚开始训练，本身分类的能力还有限，因此有波动，但是初步区分实际数据和生成数据还是可以的。</p>
+<p>到b图，D训练得比较好了，可以很明显的区分出生成数据，大家可以看到，随着绿色的线与黑色的线的偏移，蓝色的线下降了，也就是生成数据的概率下降了。</p>
+<p>那么，由于绿色的线的目标是提升概率，因此就会往蓝色线高的方向移动，也就是c图。</p>
+<p>那么随着训练的持续，由于G网络的提升，G也反过来影响D的分布。假设固定G网络不动，训练D，那么训练到最优，D^*<em>g(x) = p</em>{data}(x)/(p_{data}(x)+p_{g}(x))</p>
+<p>因此，随着p_g(x)趋近于p_{data}(x),D^*_g(x)会趋近于0.5，也就是到图d,是最终的训练结果。到这里，G网络和D网络就处于平衡状态，无法再进一步更新了。</p>
+<p>作者在文章中花了很大的篇幅证明整个网络的训练最终会收敛到 p_g(x)=p_{data}(x)，我们这里就不探讨了.</p>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><p>还是看看具体的算法及实现。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-211bf0f4c444ff1979f9cec5e92694a8_hd.jpg" alt=""></p>
+<p>这里面包含了一些重要的trick及训练方法：</p>
+<p>（1）G和D是同步训练的，但是两者的训练次数不一样，G训练一次，D训练k次。这主要还是因为初代的GAN训练不稳定。</p>
+<p>（2）注意D的训练是同时输入生成的数据和样本数据计算loss，而不是cross entropy分开计算。实际上为什么GAN不用cross entropy是因为，使用cross entropy会使D(G(z))变为0，导致没有梯度，无法更新G，而GAN这里的做法D(G(z))最终是收敛到0.5。</p>
+<p>（3）在实际训练中，文章中G网络使用了RELU和sigmoid，而D网络使用了Maxout和dropout。并且文章中作者实际使用-log(D(G(z))来代替log(1-D(G(z))，从而在训练的开始使可以加大梯度信息，但是改变后的loss将使整个GAN不是一个完美的零和博弈。</p>
+<p>在这篇开山之作的最后，作者就分析了GAN的优缺点。</p>
+<p>GAN可以任意采样，可以使用任意的可微模型（也就是任意神经网络都可以）。</p>
+<p>GAN生成的图像更加sharp，也就是work更好，这个是最关键的，意味着它值得推广。</p>
+<p>当然了，作者也直接说了GAN不好训练这一bug。</p>
+<p>在Future work中，作者也提到了使用GAN的各种可能性，包括conditional GAN，半监督学习等等。也许Ian Goodfellow在发表这篇文章的时候就已经意识到这将开创一个新的领域了。</p>
+<h1 id="DCGAN-Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks"><a href="#DCGAN-Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks" class="headerlink" title="DCGAN(( Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks))"></a>DCGAN(( Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks))</h1><p><img src="https://pic3.zhimg.com/80/v2-85ff08e7331818336bb62a726296422a_hd.jpg" alt=""></p>
+<p>GAN开始出名恐怕是因为DCGAN这篇文章。该文章做出了让人难以置信的效果如上图所示。这是GAN在图像生成上的第一次非常成功的应用，也从此开始，一大堆和图像生成相关的paper就出来了。</p>
+<h2 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h2><p>那么这篇paper对GAN做了什么改造呢？核心可以说就一点，就是使用卷积神经网络，并且实现有效训练：<br><img src="https://pic4.zhimg.com/80/v2-cbf4d5b154f8581336b6833aabb11c7a_hd.jpg" alt=""></p>
+<p>GAN在开山之作中就提出了，不好训练。那么DCGAN不但训练成功了，还拓展了维度，这就比较厉害了。DCGAN一共做了一下几点改造：</p>
+<p>（1）去掉了G网络和D网络中的pooling layer。</p>
+<p>（2）在G网络和D网络中都使用Batch Normalization</p>
+<p>（3）去掉全连接的隐藏层</p>
+<p>（4）在G网络中除最后一层使用RELU，最后一层使用Tanh</p>
+<p>（5）在D网络中每一层使用LeakyRELU。</p>
+<p>文章中作者也没有说为什么就这么做，只是因为看起来效果好。就是纯粹工程调出来了一个不错的效果。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>那么具体说一下DCGAN的网络模型：</p>
+<p>（1）G网络：100 z-&gt;fc layer-&gt;reshape -&gt;deconv+batchNorm+RELU(4) -&gt;tanh 64x64</p>
+<p>（2）D网络（版本1）：conv+batchNorm+leakyRELU (4) -&gt;reshape -&gt; fc layer 1-&gt; sigmoid </p>
+<pre><code>D网络（版本2）：conv+batchNorm+leakyRELU (4) -&gt;reshape -&gt; fc layer 2-&gt; softmax
+</code></pre><p>G网络使用4层反卷积，而D网络使用了4层卷积。</p>
+<p>基本上G网络和D网络的结构正好是反过来的。</p>
+<p>那么D网络最终的输出有两种做法：</p>
+<p>一种就是使用sigmoid输出一个0到1之间的单值作为概率，</p>
+<p>另一种则使用softmax输出两个值，一个是真的概率，一个是假的概率。</p>
+<p>两种方法本质上是一样的。</p>
+<p>网上最出名的复现当属 carpedm20/DCGAN-tensorflow，而另一个极简版本是sugyan/tf-dcgan</p>
+<h2 id="经过GAN训练后的网络学到了怎样的特征表达"><a href="#经过GAN训练后的网络学到了怎样的特征表达" class="headerlink" title="经过GAN训练后的网络学到了怎样的特征表达"></a>经过GAN训练后的网络学到了怎样的特征表达</h2><p>首先是用DCGAN+SVM做cifar-10的分类实验，从D网络的每一层卷积中通过4x4 grid的max pooling获取特征并连起来得到28672的向量然后SVM，效果比K-means好。</p>
+<p>然后将DCGAN用在SVHN门牌号识别中，同样取得不错的效果。</p>
+<p>这说明D网络确实无监督的学到了很多有效特征信息。</p>
+<p>然后就是比较有意思的了，看G可以通过改变z向量，生成怎样不同的图片。</p>
+<p>不同的z向量可以生成不同的图像，那么，z向量可以线性加减，然后就可以输出新的图像，前面的图就是这种演示。</p>
+<p>非常神奇，说明z向量确实对应了一些特别的特征，比如眼镜，性别等等。这也说明了G网络通过无监督学习自动学到了很多特征表达。</p>
+<p>总的来说，DCGAN开创了图像生成的先河，让大家看到了一条崭新的做深度学习的路子，如何更好的生成更逼真的图像成为大家争相研究的方向，而这一路到BEGAN，已经可以生成超级逼真的图像了，真是难以置信</p>
+<h1 id="CGAN-Conditional-Generative-Adversarial-Nets"><a href="#CGAN-Conditional-Generative-Adversarial-Nets" class="headerlink" title="CGAN(Conditional Generative Adversarial Nets)"></a>CGAN(Conditional Generative Adversarial Nets)</h1><p>GAN中输入是随机的数据，没有太多意义，那么我们很自然的会想到能否用输入改成一个有意义的数据，最简单的就是数字字体生成，能否输入一个数字，然后输出对应的字体。这就是CGAN要做的事。</p>
+<p>做法是非常的简单的：</p>
+<p>就是在G网络的输入在z的基础上连接一个输入y，然后在D网络的输入在x的基础上也连接一个y：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-2ab49d09f4a4c13721c53215da2d3fb8_hd.jpg" alt=""></p>
+<p>改变之后，整个GAN的目标变成<br><img src="https://pic1.zhimg.com/80/v2-474c95074c3a448937b25a5103c8e9be_hd.jpg" alt=""></p>
+<p>训练方式几乎就是不变的，但是从GAN的无监督变成了有监督。</p>
+<p>只是大家可以看到，这里和传统的图像分类这样的任务正好反过来了，图像分类是输入图片，然后对图像进行分类，而这里是输入分类，要反过来输出图像。显然后者要比前者难。</p>
+<p>基于这样的算法，作者做了两个任务：一个是MNIST的字体生成任务，另一个是图像多标签任务。</p>
+<p>这里就谈MNIST字体生成任务，要求输入数字，输入对应字体。那么这里的数字是处理成one hot的形式，也就是如果是5，那么对应one hot就是[0,0,0,0,0,1,0,0,0,0]。然后和100维的z向量串联输入。</p>
+<p>然后大家可以发现，这样的训练通过调整z向量，可以改变输出。这样就解决了多种输出问题</p>
+<p><img src="https://pic4.zhimg.com/80/v2-adcecb22fd3a67b2e01cbba8d45c82bd_hd.jpg" alt=""></p>
+<p>可以看到可以生成不同形状的字体，只是生成质量还是有待改进，但是这已经足够验证CGAN的有效性了。</p>
+<h1 id="InfoGAN"><a href="#InfoGAN" class="headerlink" title="InfoGAN"></a>InfoGAN</h1><p>有了CGAN，我们可以有一个单一输入y，然后通过调整z输出不同的图像。但是CGAN是有监督的，我们需要指定y。那么有没有可能实现无监督的CGAN？这个想法本身就比较疯狂，要实现无监督的CGAN，意味着需要让神经网络不但通过学习提取了特征，还需要把特征表达出来。对于MNIST，如何通过无监督学习让神经网络知道你输入y=2时就输出2的字体？或者用一个连续的值来调整字的粗细，方向？感觉确实是一个非常困难的问题，但是InfoGAN就这么神奇的做到了。</p>
+<p>怎么做呢？作者引入了信息论的知识，也就是mutual information互信息。作者的思路就是G网络的输入除了z之外同样类似CGAN输入一个c变量，这个变量一开始神经网络并不知道是什么含义，但是没关系，我们希望c与G网络输出的x之间的互信息最大化，也就是让神经网络自己去训练c与输出之间的关系。mutual information在文章中定义如下：</p>
+<p><img src="https://www.zhihu.com/equation?tex=I%28c%2C+G%28z%2C+c%29%29+%3D+%5Cmathbb%7BE%7D_%7Bc+%5Csim+P%28c%29%2C+x+%5Csim+G%28z%2C+c%29%7D+%5Cleft%5B+%5Clog+Q%28c+%5Cvert+X%29+%5Cright%5D+%2B+H%28c%29" alt=""></p>
+<p>其中的H为c的entropy熵，也就是log(c)*c，Q网络则是反过来基于X输出c。基于I，整个GAN的训练目标变成：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cmin_%7BG%7D+%5Cmax_%7BD%7D+%5C%2C+V%28D%2C+G%29+-+%5Clambda+I%28c%2C+G%28z%2C+c%29%29" alt=""></p>
+<p>有了这样的理论之后，就具体如何训练的问题了。</p>
+<p>相比CGAN，InfoGAN在网络上做了一定改变：</p>
+<p>（1）D网络的输入只有x，不加c。</p>
+<p>（2）Q网络和D网络共享同一个网络，只是到最后一层独立输出。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        
+  
+<div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>很惭愧，只是做了一点微小的工作:)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span><smaller>Donate</smaller></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WxQRCode.png" alt="Berry WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliQRCode.png" alt="Berry Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+
+      </div>
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Berry
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://xiabanle.me/archives/a5f2e45a.html" title="Gan（1）：GAN">http://xiabanle.me/archives/a5f2e45a.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/94801474.html" rel="next" title="机器学习笔记（八）：面试中常问的问题">
+                <i class="fa fa-chevron-left"></i> 机器学习笔记（八）：面试中常问的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/176dc8b7.html" rel="prev" title="图像处理1-打点">
+                图像处理1-打点 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_gmail"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_pocket"></a>
+  <a class="jiathis_button_reddit"></a>
+  <!--<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>-->
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    shortUrl:true,
+    hideMore:true
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Berry">
+          <p class="site-author-name" itemprop="name">Berry</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yuyukuang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/yu-yu-69-99-39/activities" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Zhihu
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5198381591" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Others
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://foreti.me/" title="Mr.Right" target="_blank">Mr.Right</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GAN"><span class="nav-number">1.</span> <span class="nav-text">GAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GAN-Generative-Adversarial-Nets"><span class="nav-number">1.1.</span> <span class="nav-text">GAN(Generative Adversarial Nets)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入GAN"><span class="nav-number">1.2.</span> <span class="nav-text">深入GAN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法实现"><span class="nav-number">1.3.</span> <span class="nav-text">算法实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DCGAN-Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks"><span class="nav-number">2.</span> <span class="nav-text">DCGAN(( Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks))</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#改进"><span class="nav-number">2.1.</span> <span class="nav-text">改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">2.2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经过GAN训练后的网络学到了怎样的特征表达"><span class="nav-number">2.3.</span> <span class="nav-text">经过GAN训练后的网络学到了怎样的特征表达</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CGAN-Conditional-Generative-Adversarial-Nets"><span class="nav-number">3.</span> <span class="nav-text">CGAN(Conditional Generative Adversarial Nets)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InfoGAN"><span class="nav-number">4.</span> <span class="nav-text">InfoGAN</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      <!--/noindex-->
+      
+	
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Berry</span>
+  <div class="theme-info">
+  <div class="powered-by"></div>
+  Source -
+  <a class="theme-link" href="https://github.com/kuangyuyu" rel="external nofollow">
+    Github
+  </a>
+  </div>
+</div>
+
+
+<div class="powered-by">
+  <span class="with-love"><i class="fa fa-eye"></i></span>
+  <span id="busuanzi_value_site_pv"></span>
+</div>
+<div class="powered-by">
+<span class="with-love"><i class="fa fa-user"></i></span>
+<span id="busuanzi_value_site_uv"></span>
+</div>
+
+<div class="theme-info">
+  <span class="post-count">博客全站共63.4k字</span>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'yuyukuang',
+            repo: 'yuyukuang.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '24f0c110e76adae44857d5d7102e3f1adc165659',
+            
+                client_id: '23956de71da002280330'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("mDclo4WLTcm4dNVtpl2oWUtw-gzGzoHsz", "E4XnzAo4x7eti6TsKzjmuPBC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!--移动端判断，是否引入DaoVoice-->
+<script>
+var browser={  
+    versions:function(){   
+           var u = navigator.userAgent, app = navigator.appVersion;   
+           return {//移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+            };  
+         }(),  
+         language:(navigator.browserLanguage || navigator.language).toLowerCase()  
+}   
+  if(browser.versions.mobile || browser.versions.ios || browser.versions.android ||   
+    browser.versions.iPhone || browser.versions.iPad){        
+             
+  }else{
+    
+
+  }
+</script>
+  
+</body>
+</html>

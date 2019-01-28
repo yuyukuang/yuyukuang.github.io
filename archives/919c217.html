@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="55t7k88xERfdEg6G3LD_kVq4ZhIwTqrpDG6ae3QW96E">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="yY5pucysgo">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="深度学习,算法,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Little Tail" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="SVM以下关于SVM说法正确的是（）A.L2正则项，作用是最大化分类间隔，使得分类器拥有更强的泛化能力B.Hinge 损失函数，作用是最小化经验分类错误C.分类间隔为1/||w||，||w||代表向量的模D.当参数C越小时，分类间隔越大，分类错误越多，趋于欠学习 (1). 考虑加入正则化项的原因：想象一个完美的数据集，y&amp;gt;1是正类，y&amp;lt;-1是负类，决策面y=0，加入一个y=-30的正类">
+<meta name="keywords" content="深度学习,算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习笔记（四）：AdaBoost算法 Boosting和Bagging等">
+<meta property="og:url" content="http://xiabanle.me/archives/919c217.html">
+<meta property="og:site_name" content="Little Tail">
+<meta property="og:description" content="SVM以下关于SVM说法正确的是（）A.L2正则项，作用是最大化分类间隔，使得分类器拥有更强的泛化能力B.Hinge 损失函数，作用是最小化经验分类错误C.分类间隔为1/||w||，||w||代表向量的模D.当参数C越小时，分类间隔越大，分类错误越多，趋于欠学习 (1). 考虑加入正则化项的原因：想象一个完美的数据集，y&amp;gt;1是正类，y&amp;lt;-1是负类，决策面y=0，加入一个y=-30的正类">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-28T15:42:56.768Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习笔记（四）：AdaBoost算法 Boosting和Bagging等">
+<meta name="twitter:description" content="SVM以下关于SVM说法正确的是（）A.L2正则项，作用是最大化分类间隔，使得分类器拥有更强的泛化能力B.Hinge 损失函数，作用是最小化经验分类错误C.分类间隔为1/||w||，||w||代表向量的模D.当参数C越小时，分类间隔越大，分类错误越多，趋于欠学习 (1). 考虑加入正则化项的原因：想象一个完美的数据集，y&amp;gt;1是正类，y&amp;lt;-1是负类，决策面y=0，加入一个y=-30的正类">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiabanle.me/archives/919c217.html">
+
+
+
+
+
+  <title>机器学习笔记（四）：AdaBoost算法 Boosting和Bagging等 | Little Tail</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?0f0daeaed626293d9c84d4ebb98cb655";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Little Tail</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Berry's Blogs</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiabanle.me/archives/919c217.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Berry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Little Tail">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">机器学习笔记（四）：AdaBoost算法 Boosting和Bagging等</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-27T16:50:02+00:00">
+                2018-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/archives/919c217.html" class="leancloud_visitors" data-flag-title="机器学习笔记（四）：AdaBoost算法 Boosting和Bagging等">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读量： </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  4,517
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h1><p>以下关于SVM说法正确的是（）<br>A.L2正则项，作用是最大化分类间隔，使得分类器拥有更强的泛化能力<br>B.Hinge 损失函数，作用是最小化经验分类错误<br>C.分类间隔为1/||w||，||w||代表向量的模<br>D.当参数C越小时，分类间隔越大，分类错误越多，趋于欠学习</p>
+<p>(1). 考虑加入正则化项的原因：想象一个完美的数据集，y&gt;1是正类，y&lt;-1是负类，决策面y=0，加入一个y=-30的正类噪声样本，那么决策面将会变“歪”很多，分类间隔变小，泛化能力减小。A正确。</p>
+<p>(2). 加入正则项之后，对噪声样本的容错能力增强，前面提到的例子里面，决策面就会没那么“歪”了，使得分类间隔变大，提高了泛化能力。 B正确。 </p>
+<p>(3). C错误。间隔应该是2/||w||才对，后半句应该没错，向量的模通常指的就是其二范数。 </p>
+<p>(4). D正确。考虑软间隔的时候，C对优化问题的影响就在于把a的范围从[0，+inf]限制到了[0,C]。C越小，那么a就会越小，目标函数拉格朗日函数导数为0可以求出w=求和a_i<em>y_i</em>x_i，a变小使得w变小，因此间隔2/||w||变大</p>
+<h1 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h1><p>在其他条件不变的前提下，以下哪种做法容易引起机器学习中的过拟合问题（）<br>A.增加训练集量<br>B.减少神经网络隐藏层节点数<br>C.删除稀疏的特征S<br>D.SVM算法中使用高斯核/RBF核代替线性核</p>
+<p>(1). 一般认为，增加隐层数可以降低网络误差（也有文献认为不一定能有效降低），提高精度，但也使网络复杂化，从而增加了网络的训练时间和出现“过拟合”的倾向， </p>
+<p>(2). 引起过拟合的应该是太多的参数引起的。神经网络减少隐藏层节点，就是在减少参数啊，只会将训练误差变高，怎么会过拟合呢。 B错误。 </p>
+<p>(3). 径向基(RBF)核函数/高斯核函数的说明</p>
+<p>a. 这个核函数可以将原始空间映射到无穷维空间。</p>
+<p>b. 对于参数 ，如果选的很大，高次特征上的权重实际上衰减得非常快，实际上（数值上近似一下）相当于一个低维的子空间；反过来，如果选得很小，则可以将任意的数据映射为线性可分——当然，这并不一定是好事，因为随之而来的可能是非常严重的过拟合问题。</p>
+<p>c. 不过，总的来说，通过调整参数 ，高斯核实际上具有相当高的灵活性，也是 使用最广泛的核函数 之一。 </p>
+<p>(4). D正确。SVM高斯核函数比线性核函数模型更复杂，容易过拟合。</p>
+<hr>
+<h1 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h1><p>数据清理中，处理缺失值的方法有两种：</p>
+<ol>
+<li><p>删除法：</p>
+<pre><code>1）删除观察样本
+2）删除变量：当某个变量缺失值较多且对研究目标影响不大时，可以将整个变量整体删除
+3）使用完整原始数据分析：当数据存在较多缺失而其原始数据完整时，可以使用原始数据替代现有数据进行分析
+4）改变权重：当删除缺失数据会改变数据结构时，通过对完整数据按照不同的权重进行加权，可以降低删除缺失数据带来的偏差
+</code></pre></li>
+<li><p>查补法：均值插补、回归插补、抽样填补等<br>成对删除与改变权重为一类<br>估算与查补法为一类</p>
+</li>
+<li><p>由于调查、编码和录入误差，数据中可能存在一些无效值和缺失值，需要给予适当的处理。常用的处理方法有：估算，整例删除，变量删除和成对删除。</p>
+</li>
+</ol>
+<p>估算(estimation)。最简单的办法就是用某个变量的样本均值、中位数或众数代替无效值和缺失值。这种办法简单，但没有充分考虑数据中已有的信息，误差可能较大。另一种办法就是根据调查对象对其他问题的答案，通过变量之间的相关分析或逻辑推论进行估计。例如，某一产品的拥有情况可能与家庭收入有关，可以根据调查对象的家庭收入推算拥有这一产品的可能性。</p>
+<p>整例删除(casewise deletion)是剔除含有缺失值的样本。由于很多问卷都可能存在缺失值，这种做法的结果可能导致有效样本量大大减少，无法充分利用已经收集到的数据。因此，只适合关键变量缺失，或者含有无效值或缺失值的样本比重很小的情况。</p>
+<p>变量删除(variable deletion)。如果某一变量的无效值和缺失值很多，而且该变量对于所研究的问题不是特别重要，则可以考虑将该变量删除。这种做法减少了供分析用的变量数目，但没有改变样本量。</p>
+<p>成对删除(pairwise deletion)是用一个特殊码(通常是9、99、999等)代表无效值和缺失值，同时保留数据集中的全部变量和样本。但是，在具体计算时只采用有完整答案的样本，因而不同的分析因涉及的变量不同，其有效样本量也会有所不同。这是一种保守的处理方法，最大限度地保留了数据集中的可用信息。</p>
+<p>采用不同的处理方法可能对分析结果产生影响，尤其是当缺失值的出现并非随机且变量之间明显相关时。因此，在调查中应当尽量避免出现无效值和缺失值，保证数据的完整性。</p>
+<h1 id="分支定界法"><a href="#分支定界法" class="headerlink" title="分支定界法"></a>分支定界法</h1><ol>
+<li><p>分支定界法（branch and bound）是一种求解 整数规划 问题的最常用算法。</p>
+</li>
+<li><p>这种方法不但可以求解纯整数规划，还可以求解混合整数规划问题。</p>
+</li>
+<li><p>分支定界法是计算机最擅长 的广义搜索穷举算法。</p>
+</li>
+<li><p>分支定界法是一种搜索与迭代的方法，选择不同的分支变量和子问题进行分支。</p>
+</li>
+<li><p>对于两个变量的整数规划问题，使用网格的方法有时更为简单。</p>
+</li>
+<li><p>分支定界法类似决策树的决策特征，要选择那些具有强可分辨性的少量特征。</p>
+</li>
+</ol>
+<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><p>关于线性回归的描述,以下正确的有:2,3,5</p>
+<ol>
+<li>基本假设包括随机干扰项是均值为0,方差为1的标准正态分布</li>
+<li>基本假设包括随机干扰项是均值为0的同方差正态分布</li>
+<li>在违背基本假设时,普通最小二乘法估计量不再是最佳线性无偏估计量</li>
+<li>在违背基本假设时,模型不再可以估计</li>
+<li>可以用DW检验残差是否存在序列相关性</li>
+<li>多重共线性会使得参数估计值方差减小</li>
+</ol>
+<p>一元线性回归的基本假设有:</p>
+<ol>
+<li>随机误差项是一个期望值或平均值为0的随机变量； </li>
+<li>对于解释变量的所有观测值，随机误差项有相同的方差； </li>
+<li>随机误差项彼此不相关；</li>
+<li>解释变量是确定性变量，不是随机变量，与随机误差项彼此之间相互独立；</li>
+<li>解释变量之间不存在精确的（完全的）线性关系，即解释变量的样本观测值矩阵是满秩矩阵；</li>
+<li>随机误差项服从正态分布</li>
+</ol>
+<p>注意：</p>
+<ol>
+<li><p>违背基本假设的计量经济学模型还是可以估计的，只是不能使用普通最小二乘法进行估计。 </p>
+</li>
+<li><p>当存在异方差时，普通最小二乘法估计存在以下问题： </p>
+</li>
+<li><p>参数估计值虽然是无偏的，但不是最小方差线性无偏估计。</p>
+</li>
+<li><p>杜宾-瓦特森（DW）检验，计量经济，统计分析中常用的一种检验序列一阶 自相关 最常用的方法。 </p>
+</li>
+<li><p>所谓多重共线性（Multicollinearity）是指线性回归模型中的解释变量之间由于存在精确相关关系或高度相关关系而使模型估计失真或难以估计准确。影响</p>
+</li>
+</ol>
+<p>（1）完全共线性下参数估计量不存在</p>
+<p>（2）近似共线性下OLS估计量非有效</p>
+<p>多重共线性使参数估计值的方差增大，1/(1-r2)为方差膨胀因子(Variance Inflation Factor, VIF)</p>
+<p>（3）参数估计量经济含义不合理</p>
+<p>（4）变量的显著性检验失去意义，可能将重要的解释变量排除在模型之外</p>
+<p>（5）模型的预测功能失效。变大的方差容易使区间预测的“区间”变大，使预测失去意义。</p>
+<h1 id="SVM-AdaBoost算法-Boosting和Bagging"><a href="#SVM-AdaBoost算法-Boosting和Bagging" class="headerlink" title="SVM AdaBoost算法 Boosting和Bagging"></a>SVM AdaBoost算法 Boosting和Bagging</h1><p>以下说法中正确的是(BD)<br>A.SVM对噪声(如来自其他分布的噪声样本)鲁棒<br>B.在AdaBoost算法中,所有被分错的样本的权重更新比例相同<br>C.Boosting和Bagging都是组合多个分类器投票的方法,二者都是根据单个分类器的正确率决定其权重<br>D.给定n个数据点,如果其中一半用于训练,一般用于测试,则训练误差和测试误差之间的差别会随着n的增加而减少</p>
+<p>Adaboost目的是从训练数据中学习一系列弱分类器，然后将其按一定权重累加起来得到强分类器。<br>刚开始每个样本对应的权重是相等的，在此样本分布下训练一个基本分类器c1.对于c1错分的样本增加其权重，对正确分类的样本降低其权重。这样使得错分的样本突出出来，并得到一个新的样本分布。同时根据分类情况赋予c1一个权重，表示其重要程度，分类正确率越高权重越大。然后在新的样本分布下对分类器进行训练，得到c2及其权重。依此类推，得到M个基本分类器及其权重。将这些弱分类器按照权重累加起来就是所期望的强分类器。（B对）</p>
+<p>Bagging是对训练样本多次抽样训练多个分类器，然后对测试集进行投票所得到的优胜结果就是最终的分类结果。在投票时每个分类器的权重是相等的。（所以C错）</p>
+<ol>
+<li><p>SVM对噪声（如来自其他分布的噪声样本）鲁棒。SVM本身对噪声具有一定的鲁棒性，但实验证明，是当噪声率低于一定水平的噪声对SVM没有太大影响，但随着噪声率的不断增加，分类器的识别率会降低。</p>
+</li>
+<li><p>在AdaBoost算法中所有被分错的样本的权重更新比例相同。AdaBoost算法中不同的训练集是通过调整每个样本对应的权重来实现的。开始时，每个样本对应的权重是相同的，即其中n为样本个数，在此样本分布下训练出一弱分类器。对于分类错误的样本，加大其对应的权重；而对于分类正确的样本，降低其权重，这样分错的样本就被凸显出来，从而得到一个新的样本分布。在新的样本分布下，再次对样本进行训练，得到弱分类器。以此类推，将所有的弱分类器重叠加起来，得到强分类器。</p>
+</li>
+<li><p>Boost和Bagging都是组合多个分类器投票的方法，二者均是根据单个分类器正确率决定其权重。</p>
+</li>
+</ol>
+<p>Bagging与Boosting的区别：取样方式不同。</p>
+<p>Bagging采用均匀取样，而Boosting根据错误率取样。</p>
+<p>Bagging的各个预测函数没有权重，而Boosting是由权重的，Bagging的各个预测函数可以并行生成，而Boosing的哥哥预测函数只能顺序生成。</p>
+<h1 id="判别式模型与生成式模型"><a href="#判别式模型与生成式模型" class="headerlink" title="判别式模型与生成式模型"></a>判别式模型与生成式模型</h1><p>生成式模型(Generative Model)与判别式模型(Discrimitive Model)是分类器常遇到的概念，它们的区别在于：（对于输入x，类别标签y）</p>
+<ol>
+<li><p>生成式模型估计它们的联合概率分布P(x,y)</p>
+</li>
+<li><p>判别式模型估计决策函数F(X)或条件概率分布P(y|x)</p>
+</li>
+<li><p>生成式式模型可以根据贝叶斯公式得到判别式模型，但反过来不行</p>
+</li>
+</ol>
+<h2 id="生成式模型"><a href="#生成式模型" class="headerlink" title="生成式模型"></a>生成式模型</h2><ol>
+<li>判别式分析</li>
+<li>朴素贝叶斯Native Bayes</li>
+<li>混合高斯型Gaussians</li>
+<li>K近邻KNN</li>
+<li>隐马尔科夫模型HMM</li>
+<li>贝叶斯网络</li>
+<li>sigmoid belief networks</li>
+<li>马尔科夫随机场Markov random fields</li>
+<li>深度信念网络DBN</li>
+<li>隐含狄利克雷分布简称LDA(Latent Dirichlet allocation)</li>
+<li>多专家模型（the mixture of experts model）</li>
+</ol>
+<h2 id="判别式模型"><a href="#判别式模型" class="headerlink" title="判别式模型"></a>判别式模型</h2><ol>
+<li>线性回归linear regression</li>
+<li>逻辑回归logic regression</li>
+<li>神经网络NN</li>
+<li>支持向量机SVM</li>
+<li>高斯过程Gaussian process</li>
+<li>条件随机场CRF</li>
+<li>CART(Classification and regression tree)</li>
+<li>Boosting</li>
+</ol>
+<h1 id="线性分类器"><a href="#线性分类器" class="headerlink" title="线性分类器"></a>线性分类器</h1><p>线性分类器有三大类：感知器准则函数、SVM、Fisher准则，而贝叶斯分类器不是线性分类器。</p>
+<ol>
+<li><p>感知器准则函数：代价函数J=-(W*X+w0).分类的准则是最小化代价函数。感知器是神经网络（NN）的基础，网上有很多介绍。</p>
+</li>
+<li><p>SVM：支持向量机也是很经典的算法，优化目标是最大化间隔（margin），又称最大间隔分类器，是一种典型的线性分类器。（使用核函数可解决非线性问题）</p>
+</li>
+<li><p>Fisher准则：更广泛的称呼是线性判别分析（LDA），将所有样本投影到一条远点出发的直线，使得同类样本距离尽可能小，不同类样本距离尽可能大，具体为最大化“广义瑞利商”。</p>
+</li>
+<li><p>贝叶斯分类器：一种基于统计方法的分类器，要求先了解样本的分布特点（高斯、指数等），所以使用起来限制很多。在满足一些特定条件下，其优化目标与线性分类器有相同结构（同方差高斯分布等），其余条件下不是线性分类。</p>
+</li>
+</ol>
+<h2 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h2><p>在分类问题中,我们经常会遇到正负样本数据量不等的情况,比如正样本为10w条数据,负样本只有1w条数据,以下最合适的处理方法是()<br>A.将负样本重复10次,生成10w样本量,打乱顺序参与分类<br>B.直接进行分类,可以最大限度利用数据<br>C.从10w正样本中随机抽取1w参与分类<br>D.将负样本每个权重设置为10,正样本权重为1,参与训练过程</p>
+<p>解决这类问题主要分：</p>
+<ol>
+<li><p>重采样。A可视作重采样的变形。改变数据分布消除不平衡，可能导致过拟合。</p>
+</li>
+<li><p>欠采样。C的方案 提高少数类的分类性能，可能丢失多数类的重要信息。</p>
+</li>
+<li><p>权值调整。</p>
+</li>
+</ol>
+<p>如果1：10算是均匀的话，可以将多数类分割成为1000份。然后将每一份跟少数类的样本组合进行训练得到分类器。而后将这1000个分类器用assemble的方法组合位一个分类器。A选项可以看作此方式，因而相对比较合理。</p>
+<p>另：如果目标是 预测的分布 跟训练的分布一致，那就加大对分布不一致的惩罚系数。</p>
+<p>D方案也是其中一种方式。</p>
+<h2 id="类域界面方程法"><a href="#类域界面方程法" class="headerlink" title="类域界面方程法"></a>类域界面方程法</h2><p>类域界面方程法中，不能求线性不可分情况下分类问题近似或精确解的方法是？<br>A.伪逆法<br>B.感知器算法<br>C.基于二次准则的H-K算法<br>D.势函数法</p>
+<p>伪逆法：径向基（RBF）神经网络的训练算法，径向基解决的就是线性不可分的情况。</p>
+<p>感知器算法：线性分类模型。线性不可分时，感知器算法不收敛。</p>
+<p>H-K算法：在最小均方误差准则下求得权矢量，二次准则解决非线性问题。</p>
+<p>基于二次准则函数的H-K算法较之于感知器算法的优点是:可以判别问题是否线性可分,其解的适应性更好.</p>
+<p>势函数法：势函数非线性。</p>
+<h1 id="主分量（主成分）分析PCA"><a href="#主分量（主成分）分析PCA" class="headerlink" title="主分量（主成分）分析PCA"></a>主分量（主成分）分析PCA</h1><p>已知一组数据的协方差矩阵P,下面关于主分量说法错误的是(C)<br>A.主分量分析的最佳准则是对一组数据进行按一组正交基分解, 在只取相同数量分量的条件下,以均方误差计算截尾误差最小<br>B.在经主分量分解后,协方差矩阵成为对角矩阵<br>C.主分量分析就是K-L变换<br>D.主分量是通过求协方差矩阵的特征值得到</p>
+<p>K-L变换与PCA变换是不同的概念</p>
+<p>PCA的变换矩阵是协方差矩阵</p>
+<p>K-L变换的变换矩阵可以有很多种（二阶矩阵、协方差矩阵、总类内离散度矩阵等等）</p>
+<p>当K-L变换矩阵为协方差矩阵时，等同于PCA。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        
+  
+<div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>很惭愧，只是做了一点微小的工作:)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span><smaller>Donate</smaller></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WxQRCode.png" alt="Berry WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliQRCode.png" alt="Berry Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+
+      </div>
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Berry
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://xiabanle.me/archives/919c217.html" title="机器学习笔记（四）：AdaBoost算法 Boosting和Bagging等">http://xiabanle.me/archives/919c217.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/8823626c.html" rel="next" title="机器学习笔记（三）：SVM核函数等">
+                <i class="fa fa-chevron-left"></i> 机器学习笔记（三）：SVM核函数等
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/167cd958.html" rel="prev" title="数据结构（一）">
+                数据结构（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_gmail"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_pocket"></a>
+  <a class="jiathis_button_reddit"></a>
+  <!--<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>-->
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    shortUrl:true,
+    hideMore:true
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Berry">
+          <p class="site-author-name" itemprop="name">Berry</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yuyukuang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/yu-yu-69-99-39/activities" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Zhihu
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5198381591" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Others
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://foreti.me/" title="Mr.Right" target="_blank">Mr.Right</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM"><span class="nav-number">1.</span> <span class="nav-text">SVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过拟合"><span class="nav-number">2.</span> <span class="nav-text">过拟合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据清理"><span class="nav-number">3.</span> <span class="nav-text">数据清理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支定界法"><span class="nav-number">4.</span> <span class="nav-text">分支定界法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性回归"><span class="nav-number">5.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM-AdaBoost算法-Boosting和Bagging"><span class="nav-number">6.</span> <span class="nav-text">SVM AdaBoost算法 Boosting和Bagging</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判别式模型与生成式模型"><span class="nav-number">7.</span> <span class="nav-text">判别式模型与生成式模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成式模型"><span class="nav-number">7.1.</span> <span class="nav-text">生成式模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判别式模型"><span class="nav-number">7.2.</span> <span class="nav-text">判别式模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性分类器"><span class="nav-number">8.</span> <span class="nav-text">线性分类器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分类问题"><span class="nav-number">8.1.</span> <span class="nav-text">分类问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类域界面方程法"><span class="nav-number">8.2.</span> <span class="nav-text">类域界面方程法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主分量（主成分）分析PCA"><span class="nav-number">9.</span> <span class="nav-text">主分量（主成分）分析PCA</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      <!--/noindex-->
+      
+	
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Berry</span>
+  <div class="theme-info">
+  <div class="powered-by"></div>
+  Source -
+  <a class="theme-link" href="https://github.com/kuangyuyu" rel="external nofollow">
+    Github
+  </a>
+  </div>
+</div>
+
+
+<div class="powered-by">
+  <span class="with-love"><i class="fa fa-eye"></i></span>
+  <span id="busuanzi_value_site_pv"></span>
+</div>
+<div class="powered-by">
+<span class="with-love"><i class="fa fa-user"></i></span>
+<span id="busuanzi_value_site_uv"></span>
+</div>
+
+<div class="theme-info">
+  <span class="post-count">博客全站共63.4k字</span>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'yuyukuang',
+            repo: 'yuyukuang.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '24f0c110e76adae44857d5d7102e3f1adc165659',
+            
+                client_id: '23956de71da002280330'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("mDclo4WLTcm4dNVtpl2oWUtw-gzGzoHsz", "E4XnzAo4x7eti6TsKzjmuPBC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!--移动端判断，是否引入DaoVoice-->
+<script>
+var browser={  
+    versions:function(){   
+           var u = navigator.userAgent, app = navigator.appVersion;   
+           return {//移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+            };  
+         }(),  
+         language:(navigator.browserLanguage || navigator.language).toLowerCase()  
+}   
+  if(browser.versions.mobile || browser.versions.ios || browser.versions.android ||   
+    browser.versions.iPhone || browser.versions.iPad){        
+             
+  }else{
+    
+
+  }
+</script>
+  
+</body>
+</html>

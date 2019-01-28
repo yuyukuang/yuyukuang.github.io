@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="55t7k88xERfdEg6G3LD_kVq4ZhIwTqrpDG6ae3QW96E">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="yY5pucysgo">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="数据处理,图像处理,python,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Little Tail" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="视频-图像切换需要将一段视频文件转成gif，偶遇ffmpeg，于是就学习了一下，它真的很强大。 几个概念比特率比特率，英文为 bit rate，描述每秒钟输出多少 KB 的参数，单位是 Kbps，也就是 kbit/s，8Kbit/s = 1KB/s。也就是说800Kbps意思就是每秒视频就要占用100KB磁盘空间。对于音频文件也存在比特率，同理。压缩同一个视频，视频编码率越大，文件体积越大。视频编">
+<meta name="keywords" content="数据处理,图像处理,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理5-视频-图片切换ffmpeg">
+<meta property="og:url" content="http://xiabanle.me/archives/2530a991.html">
+<meta property="og:site_name" content="Little Tail">
+<meta property="og:description" content="视频-图像切换需要将一段视频文件转成gif，偶遇ffmpeg，于是就学习了一下，它真的很强大。 几个概念比特率比特率，英文为 bit rate，描述每秒钟输出多少 KB 的参数，单位是 Kbps，也就是 kbit/s，8Kbit/s = 1KB/s。也就是说800Kbps意思就是每秒视频就要占用100KB磁盘空间。对于音频文件也存在比特率，同理。压缩同一个视频，视频编码率越大，文件体积越大。视频编">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/FiveYellowMice/how-to-convert-videos-with-ffmpeg-zh/raw/master/image/windows-ff-prompt.png">
+<meta property="og:updated_time" content="2019-01-28T15:42:56.752Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图像处理5-视频-图片切换ffmpeg">
+<meta name="twitter:description" content="视频-图像切换需要将一段视频文件转成gif，偶遇ffmpeg，于是就学习了一下，它真的很强大。 几个概念比特率比特率，英文为 bit rate，描述每秒钟输出多少 KB 的参数，单位是 Kbps，也就是 kbit/s，8Kbit/s = 1KB/s。也就是说800Kbps意思就是每秒视频就要占用100KB磁盘空间。对于音频文件也存在比特率，同理。压缩同一个视频，视频编码率越大，文件体积越大。视频编">
+<meta name="twitter:image" content="https://github.com/FiveYellowMice/how-to-convert-videos-with-ffmpeg-zh/raw/master/image/windows-ff-prompt.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiabanle.me/archives/2530a991.html">
+
+
+
+
+
+  <title>图像处理5-视频-图片切换ffmpeg | Little Tail</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?0f0daeaed626293d9c84d4ebb98cb655";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Little Tail</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Berry's Blogs</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiabanle.me/archives/2530a991.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Berry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Little Tail">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">图像处理5-视频-图片切换ffmpeg</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T15:50:02+00:00">
+                2018-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/图像处理/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/archives/2530a991.html" class="leancloud_visitors" data-flag-title="图像处理5-视频-图片切换ffmpeg">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读量： </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  6,579
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  28
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="视频-图像切换"><a href="#视频-图像切换" class="headerlink" title="视频-图像切换"></a>视频-图像切换</h1><p>需要将一段视频文件转成gif，偶遇ffmpeg，于是就学习了一下，它真的很强大。</p>
+<h2 id="几个概念"><a href="#几个概念" class="headerlink" title="几个概念"></a>几个概念</h2><h3 id="比特率"><a href="#比特率" class="headerlink" title="比特率"></a>比特率</h3><p>比特率，英文为 bit rate，描述每秒钟输出多少 KB 的参数，单位是 Kbps，也就是 kbit/s，8Kbit/s = 1KB/s。也就是说800Kbps意思就是每秒视频就要占用100KB磁盘空间。对于音频文件也存在比特率，同理。压缩同一个视频，视频编码率越大，文件体积越大。视频编码率越大，画质越好，马赛克越少。</p>
+<p>MP3一般使用的比特率为 8~320kbps。</p>
+<h3 id="可变码率"><a href="#可变码率" class="headerlink" title="可变码率"></a>可变码率</h3><p>可变码率叫做 Variable Bitrate (VBR)，VBR 指的是编码器的输出码率可以根据编码器输入源信号的复杂度自适应调整，目的是为了达到输出质量保持不变。VBR 适用于存储，不太适用流式传输，可以更有效的地利用有限空间。</p>
+<h3 id="固定码率"><a href="#固定码率" class="headerlink" title="固定码率"></a>固定码率</h3><p>固定码率叫做 Constant Bitrate (CBR)，CBR 指的是编码器输出码率固定，CBR 不适合存储，CBR 对于复杂内容可能没有足够码率进行编码，从而导致质量下降，同时会在简单内容部分浪费一些码率。</p>
+<h3 id="帧数"><a href="#帧数" class="headerlink" title="帧数"></a>帧数</h3><p>每秒钟播放的图片数，单位 fps（英文：Frames Per Second），每秒的帧数或者帧率表示视频文件或者图形处理器场景时每秒钟能够更新的次数。</p>
+<p>高的帧率可以得到更流畅、更逼真的画面。一般来说30fps就是可以接受的，但是将性能提升至60fps则可以明显提升交互感和逼真感，但是一般来说超过75fps一般就不容易察觉到有明显的流畅度提升了。如果帧率超过屏幕刷新率只会浪费图形处理的能力，因为显示器不能以这么快的速度更新，这样超过刷新率的帧率就浪费掉了。</p>
+<p>在同一视频，同一码率的情况下，帧数越大，则画质越不好。尤其是运动的画面。因为每张画面会分担每秒有限的文件体积，如果画面越多，那么每张画面所能表现的内容就越有限。</p>
+<p>当画面的FPS达到60帧/秒时，已经能满足绝大部分应用需求。一般情况下，如果能够保证游戏画面的平均FPS能够达到30帧/秒，那么画面已经基本流畅；能够达到50帧/秒，就基本可以体会到行云流水的感觉了。一般人很难分辨出60 帧/秒与100帧/秒有什么不同。</p>
+<h3 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h3><p>最好理解的概念了，表示画面的大小，单位是像素 px。</p>
+<p>和编码率的关系：越高的分辨率，需要越高的编码率，因为图像的细节多了，需要的文件体积也应该增大，否则还不如画面小一些，你会发现同一码率，画面越大，图像的马赛克程度越明显。</p>
+<h3 id="采样率"><a href="#采样率" class="headerlink" title="采样率"></a>采样率</h3><p>每秒钟对音频信号的采样次数，采样频率越高声音还原度越高，声音更加自然。单位是赫兹 Hz。音频文件一般使用的采样率是 44100 Hz ，也就是一秒钟采样 44100 次，之所以使用这个数值是因为经过了反复实验，人们发现这个采样精度最合适，低于这个值就会有较明显的损失，而高于这个值人的耳朵已经很难分辨，而且增大了数字音频所占用的空间。我们所使用的CD的采样标准就是44.1k，目前44.1k还是一个最通行的标准。</p>
+<h1 id="安装ffmpeg"><a href="#安装ffmpeg" class="headerlink" title="安装ffmpeg"></a>安装ffmpeg</h1><p>Debian/Ubuntu/Linux Mint 下安装ffmpeg很简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install ffmpeg</span><br></pre></td></tr></table></figure>
+<p>windows比较头疼,分享一个我觉得还挺简单的:<br>首先你需要知道 你的电脑是 32 位还是 64 位。</p>
+<p>然后访问 <a href="http://ffmpeg.zeranoe.com/builds/" target="_blank" rel="noopener">http://ffmpeg.zeranoe.com/builds/</a> ，你可以看到许多灰色的按钮。如果你的电脑是 32 位，点最上面一行左边的按钮 “Download FFmpeg git-xxxxxxx 32-bit Static” ，如果是 64 位，点右边的 “Download FFmpeg git-xxxxxxx 64-bit Static” 。</p>
+<p>解压。</p>
+<p>双击 ff-prompt.bat ，如果出现了如下的界面，并且最后一行可以进行输入，则表示没有问题。<br><img src="https://github.com/FiveYellowMice/how-to-convert-videos-with-ffmpeg-zh/raw/master/image/windows-ff-prompt.png" alt=""></p>
+<p>它是一个绿色软件，你可以直接在这个窗口中执行接下来会讲到的命令。但为了方便，我推荐你进行“手动安装”。 双击解压出来的 bin 目录，可以看到 3 个 .exe 文件，将它们选中，复制到 C:\Windows\system32\ 中，此操作可能需要管理员权限。<br>然后在命令提示符中输入 ffmpeg ，如果出来的不是 “ffmpeg” 不是一个文件或内部命令，则说明安装成功！</p>
+<h1 id="ffmpeg用法举例"><a href="#ffmpeg用法举例" class="headerlink" title="ffmpeg用法举例"></a>ffmpeg用法举例</h1><h2 id="显示文件信息"><a href="#显示文件信息" class="headerlink" title="显示文件信息"></a>显示文件信息</h2><p> 显示视频信息<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4</span><br></pre></td></tr></table></figure></p>
+<h2 id="批量截图"><a href="#批量截图" class="headerlink" title="批量截图"></a>批量截图</h2><p>将视频拆分多张图片，每一帧图片，保存到 frames 文件夹下，命名 frame001.png 这种。可以加上-r 参数以用来限制每秒的帧数，-r 10 就表示每秒10帧。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 frames/frame%<span class="number">03</span>d.png</span><br></pre></td></tr></table></figure></p>
+<h2 id="图片合成视频"><a href="#图片合成视频" class="headerlink" title="图片合成视频"></a>图片合成视频</h2><p>将多张图片合成视频<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i frames/frame%<span class="number">3</span>d.png output.mp4</span><br></pre></td></tr></table></figure></p>
+<h2 id="从视频中提取音频"><a href="#从视频中提取音频" class="headerlink" title="从视频中提取音频"></a>从视频中提取音频</h2><p>从视频文件中提取音频并保存为 mp3<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -f mp3 output.mp3</span><br></pre></td></tr></table></figure></p>
+<p>如果需要可以在中间加上 -ar 44100 -ac 2 -ab 192 系数，表示采样率 44100 ，通道2立体声，码率192 kb/s.</p>
+<h2 id="将声音合成到视频"><a href="#将声音合成到视频" class="headerlink" title="将声音合成到视频"></a>将声音合成到视频</h2><p>将声音合成到视频中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input_music.mp3 -i input_video.mp4 output.mp4</span><br></pre></td></tr></table></figure></p>
+<h2 id="转化格式"><a href="#转化格式" class="headerlink" title="转化格式"></a>转化格式</h2><p>格式之间转换 大部分的情况下直接运行一下即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 output.avi</span><br></pre></td></tr></table></figure></p>
+<p>将 flv 转码 MP4<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.flv -vcodec copy -acodec copy out.mp4</span><br></pre></td></tr></table></figure></p>
+<p>-vcodec copy 和 -acodec copy 表示所使用的视频和音频编码格式，为原样拷贝。</p>
+<p>转换文件格式<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -y -i input_video.mp4 -bitexact -vcodec h263 -b <span class="number">128</span> -r <span class="number">15</span> -s <span class="number">176</span>x144 -acodec aac -ac <span class="number">2</span> -ar <span class="number">22500</span> -ab <span class="number">24</span> -f <span class="number">3</span>gp test<span class="number">.3</span>gp</span><br></pre></td></tr></table></figure></p>
+<p>或<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -y -i test.wmv -ac <span class="number">1</span> -acodec libamr_nb -ar <span class="number">8000</span> -ab <span class="number">12200</span> -s <span class="number">176</span>x144 -b <span class="number">128</span> -r <span class="number">15</span> test<span class="number">.3</span>gp</span><br></pre></td></tr></table></figure></p>
+<h2 id="视频切片操作"><a href="#视频切片操作" class="headerlink" title="视频切片操作"></a>视频切片操作</h2><p>对视频切片操作</p>
+<p>比如需要从视频第1分45秒地方，剪10秒画面，-ss 表示开始位置，-t 表示延长时间<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -ss <span class="number">00</span>:<span class="number">01</span>:<span class="number">45</span> -t <span class="number">10</span> output.mp4</span><br></pre></td></tr></table></figure></p>
+<h2 id="加速减速视频"><a href="#加速减速视频" class="headerlink" title="加速减速视频"></a>加速减速视频</h2><p>加速视频<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -vf “setpts=<span class="number">0.5</span>*PTS” output.mp4</span><br></pre></td></tr></table></figure></p>
+<p>减速视频<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -vf “setpts=<span class="number">2.0</span>*PTS” output.mp4</span><br></pre></td></tr></table></figure></p>
+<p>此操作对音频无影响</p>
+<h2 id="视频截图"><a href="#视频截图" class="headerlink" title="视频截图"></a>视频截图</h2><p>视频10秒的地方(-ss 参数)截取一张1920x1080尺寸大小的，格式为jpg的图片 -ss后跟的时间单位为秒</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input_video.mp4 -y -f image2 -t <span class="number">0.001</span> -ss <span class="number">10</span> -s <span class="number">1920</span>x1080 output.jpg</span><br></pre></td></tr></table></figure>
+<p>或者<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input_video.mp4 -ss <span class="number">00</span>:<span class="number">00</span>:<span class="number">06.000</span> -vframes <span class="number">1</span> output.png</span><br></pre></td></tr></table></figure></p>
+<h2 id="合成-gif"><a href="#合成-gif" class="headerlink" title="合成 gif"></a>合成 gif</h2><p>把视频的前30帧转换成一个Gif<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input_video.mp4 -vframes <span class="number">30</span> -y -f gif output.gif</span><br></pre></td></tr></table></figure></p>
+<p>将视频转成 gif</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -ss <span class="number">00</span>:<span class="number">00</span>:<span class="number">00.000</span> -i input.mp4 -pix_fmt rgb24 -r <span class="number">10</span> -s <span class="number">320</span>x240 -t <span class="number">00</span>:<span class="number">00</span>:<span class="number">10.000</span> output.gif</span><br></pre></td></tr></table></figure>
+<p>将输入的文件从(-ss)设定的时间开始以10帧频率，输出到320x240大小的 gif 中，时间长度为-t 设定的参数。通过这样转换出来的 gif 一般都比较大，可以使用 ImageMagick 来优化图片的大小。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">convert -layers Optimize output.gif output_optimized.gif</span><br></pre></td></tr></table></figure>
+<p>把frame.[001-100].jpg序列帧和bg.mp3音频文件利用mpeg4编码方式合成分辨率720p的视频文件output.avi：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i bg.mp3 -i frame.%<span class="number">3</span>d.jpg -s hd720 -vcodec mpeg4 output.avi</span><br></pre></td></tr></table></figure>
+<h2 id="查看ffmpeg支持格式"><a href="#查看ffmpeg支持格式" class="headerlink" title="查看ffmpeg支持格式"></a>查看ffmpeg支持格式</h2><p>要查看你的ffmpeg支持哪些格式，可以用如下命令：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -formats | less</span><br></pre></td></tr></table></figure>
+<p>设置输出文件编码率 64 kbit/s, To set the video bitrate of the output file to 64 kbit/s:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.avi -b:v <span class="number">64</span>k -bufsize <span class="number">64</span>k output.avi</span><br></pre></td></tr></table></figure></p>
+<p>设置输出文件帧率为24 fps，To force the frame rate of the output file to 24 fps:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.avi -r <span class="number">24</span> output.avi</span><br></pre></td></tr></table></figure></p>
+<p>强制输入文件以1帧，输出文件24帧 ， To force the frame rate of the input file (valid for raw formats only) to 1 fps and the frame rate of the output file to 24 fps:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -r <span class="number">1</span> -i input.mp4 -r <span class="number">24</span> output.avi</span><br></pre></td></tr></table></figure></p>
+<p>下面几步分别是，创建frames文件夹，利用 ffmpeg 将视频文件以每秒10帧输出成图像保存到 frames 文件夹中，再利用 ImageMagick 将图片组成 gif。其中 convert 命令来自 ImageMagick。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir frames</span><br><span class="line">ffmpeg -i input.mp4 -r <span class="number">10</span> frames/frame%<span class="number">03</span>d.png</span><br><span class="line">convert -delay <span class="number">5</span> -loop <span class="number">0</span> frames/frame*.png output.gif</span><br></pre></td></tr></table></figure></p>
+<p>Source: <a href="http://superuser.com/a/556031" target="_blank" rel="noopener">http://superuser.com/a/556031</a></p>
+<h2 id="利用ffmpeg屏幕录制"><a href="#利用ffmpeg屏幕录制" class="headerlink" title="利用ffmpeg屏幕录制"></a>利用ffmpeg屏幕录制</h2><p>参考：<a href="https://trac.ffmpeg.org/wiki/Capture/Desktop" target="_blank" rel="noopener">https://trac.ffmpeg.org/wiki/Capture/Desktop</a></p>
+<h2 id="添加水印"><a href="#添加水印" class="headerlink" title="添加水印"></a>添加水印</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -i picture.png -filter_complex overlay=<span class="string">"(main_w/2)-(overlay_w/2):(main_h/2)-(overlay_h)/2"</span> output.mp4</span><br></pre></td></tr></table></figure>
+<p>picture.png 为水印图片， overlay 为水印位置</p>
+<h2 id="ffmpeg使用语法"><a href="#ffmpeg使用语法" class="headerlink" title="ffmpeg使用语法"></a>ffmpeg使用语法</h2><p>ffmpeg使用语法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg [global_options] &#123;[input_file_options] -i input_file&#125; ... &#123;[output_file_options] output_file&#125; ...</span><br></pre></td></tr></table></figure></p>
+<p>如果没有输入文件，那么视音频捕捉就会起作用。</p>
+<p>作为通用的规则，选项一般用于下一个特定的文件。如果你给 –b 64选项，改选会设置下一个视频速率。对于原始输入文件，格式选项可能是需要的。</p>
+<p>缺省情况下，ffmpeg试图尽可能的无损转换，采用与输入同样的音频视频参数来输出。</p>
+<h2 id="通用选项"><a href="#通用选项" class="headerlink" title="通用选项"></a>通用选项</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-L license 显示协议  </span><br><span class="line">-h 帮助  </span><br><span class="line">-formats 显示可用的格式，编解码的，协议的  </span><br><span class="line">-decoders 可用解码器  </span><br><span class="line">-encoders 可用编码器</span><br></pre></td></tr></table></figure>
+<h2 id="主要选项"><a href="#主要选项" class="headerlink" title="主要选项"></a>主要选项</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">-i 	filename 输入文件  </span><br><span class="line">-y 	覆盖输出文件  </span><br><span class="line">-n 	不覆盖输出文件，如果输出文件存在则退出  </span><br><span class="line">-t 	duration (input/output)  </span><br><span class="line">    设置纪录时间 hh:mm:ss[.xxx]格式的记录时间也支持,在 `-i` 之前使用，则对输入文件限制记录时间；如果对输出文件使用，则是限制输出文件的时长。  </span><br><span class="line">    </span><br><span class="line">-ss position  </span><br><span class="line">    搜索到指定的时间 [-]hh:mm:ss[.xxx]的格式也支持 ，更多[参考](https://ffmpeg.org/ffmpeg-utils.html<span class="comment">#time-duration-syntax)  </span></span><br><span class="line">    </span><br><span class="line">-title string 设置标题  </span><br><span class="line">-author string 设置作者  </span><br><span class="line">-copyright string 设置版权  </span><br><span class="line">-comment string 设置评论  </span><br><span class="line">-f fmt 强迫采用格式fmt 输出  </span><br><span class="line"></span><br><span class="line">-c[:stream_specifier] codec (input/output, per-stream)  </span><br><span class="line">-codec[:stream_specifier] codec (input/output, per-stream)  </span><br><span class="line">    给输入文件指定解码器，给输出文件指定编码器， codec 为编码器名字，如果 codec 值为 `copy` 则默认为和原视频一致。  </span><br><span class="line">    </span><br><span class="line">-vcodec codec  </span><br><span class="line">    vcodec 是 -codec:v 的一个别称，强制使用codec编解码方式，未设定时使用与输入流相同的编码器。如果用copy表示原始编解码数据必须被拷贝。</span><br><span class="line"></span><br><span class="line">-target type 设置目标文件类型(vcd,svcd,dvd) 所有的格式选项（比特率，编解码以及缓冲区大小）自动设置，只需要输入如下的就可以了：</span><br><span class="line"></span><br><span class="line">    ffmpeg -i input.avi -target vcd /tmp/vcd.mpg</span><br><span class="line"></span><br><span class="line">-hq 激活高质量设置  </span><br><span class="line">-itsoffset offset 设置以秒为基准的时间偏移，该选项影响所有后面的输入文件。该偏移被加到输入文件的时戳，定义一个正偏移意味着相应的流被延迟了 offset秒。 [-]hh:mm:ss[.xxx]的格式也支持  </span><br><span class="line"></span><br><span class="line"><span class="comment">### 视频选项 &#123;#video-options&#125;</span></span><br><span class="line"></span><br><span class="line">-vframes number (output)  </span><br><span class="line">    设置视频输出帧数，是`-frames:v`的别称。</span><br><span class="line">    </span><br><span class="line">-b bitrate 设置比特率，缺省<span class="number">200</span>kb/s  </span><br><span class="line">-r fps 设置帧率 缺省<span class="number">25</span>  </span><br><span class="line">-s size 设置画面的宽高</span><br><span class="line"></span><br><span class="line">    设置帧大小,分辨率， 格式为wxh 缺省为原视频大小。下面的简写也可以直接使用：</span><br><span class="line">    ntsc <span class="number">720</span>x480</span><br><span class="line">    snits <span class="number">640</span>x480</span><br><span class="line">    hd720 <span class="number">1280</span>x720</span><br><span class="line">    hd1080 <span class="number">1920</span>x1080</span><br><span class="line">    更多[参考](https://ffmpeg.org/ffmpeg-utils.html<span class="comment">#toc-Video-size)</span></span><br><span class="line"></span><br><span class="line">-aspect aspect 设置画面比例 <span class="number">4</span>:<span class="number">3</span> <span class="number">16</span>:<span class="number">9</span> 或 <span class="number">1.3333</span> <span class="number">1.7777</span>  </span><br><span class="line">-croptop size 设置顶部切除带大小 像素单位  </span><br><span class="line">-cropbottom size –cropleft size –cropright size  </span><br><span class="line">-padtop size 设置顶部补齐的大小 像素单位  </span><br><span class="line"></span><br><span class="line">-padbottom size –padleft size –padright size –padcolor color 设置补齐条颜色(hex,<span class="number">6</span>个<span class="number">16</span>进制的数，红:绿:兰排列，比如 <span class="number">000000</span>代表黑色)</span><br><span class="line"></span><br><span class="line">-vn 不做视频记录，输出无视频内容  </span><br><span class="line">-bt tolerance 设置视频码率容忍度kbit/s  </span><br><span class="line">-maxrate bitrate设置最大视频码率容忍度  </span><br><span class="line">-minrate bitreate 设置最小视频码率容忍度</span><br><span class="line"></span><br><span class="line">-bufsize size 设置码率控制缓冲区大小</span><br><span class="line"></span><br><span class="line">-sameq 使用同样视频质量作为源（VBR）</span><br><span class="line"></span><br><span class="line">-<span class="keyword">pass</span> n 选择处理遍数（<span class="number">1</span>或者<span class="number">2</span>）。两遍编码非常有用。第一遍生成统计信息，第二遍生成精确的请求的码率</span><br><span class="line"></span><br><span class="line">-passlogfile file 选择两遍的纪录文件名为file</span><br></pre></td></tr></table></figure>
+<h2 id="高级视频选项"><a href="#高级视频选项" class="headerlink" title="高级视频选项"></a>高级视频选项</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">-g gop_size 设置图像组大小</span><br><span class="line"></span><br><span class="line">-intra 仅适用帧内编码</span><br><span class="line"></span><br><span class="line">-qscale q 使用固定的视频量化标度(VBR)</span><br><span class="line"></span><br><span class="line">-qmin q 最小视频量化标度(VBR)</span><br><span class="line"></span><br><span class="line">-qmax q 最大视频量化标度(VBR)</span><br><span class="line"></span><br><span class="line">-qdiff q 量化标度间最大偏差 (VBR)</span><br><span class="line"></span><br><span class="line">-qblur blur 视频量化标度柔化(VBR)</span><br><span class="line"></span><br><span class="line">-qcomp compression 视频量化标度压缩(VBR)</span><br><span class="line"></span><br><span class="line">-rc_init_cplx complexity 一遍编码的初始复杂度</span><br><span class="line"></span><br><span class="line">-b_qfactor factor 在p和b帧间的qp因子</span><br><span class="line"></span><br><span class="line">-i_qfactor factor 在p和i帧间的qp因子</span><br><span class="line"></span><br><span class="line">-b_qoffset offset 在p和b帧间的qp偏差</span><br><span class="line"></span><br><span class="line">-i_qoffset offset 在p和i帧间的qp偏差</span><br><span class="line"></span><br><span class="line">-rc_eq equation 设置码率控制方程 默认tex^qComp</span><br><span class="line"></span><br><span class="line">-rc_override override 特定间隔下的速率控制重载</span><br><span class="line"></span><br><span class="line">-me method 设置运动估计的方法 可用方法有 zero phods log x1 epzs(缺省) full</span><br><span class="line"></span><br><span class="line">-dct_algo algo 设置dct的算法 可用的有 <span class="number">0</span> FF_DCT_AUTO 缺省的DCT <span class="number">1</span> FF_DCT_FASTINT <span class="number">2</span> FF_DCT_INT <span class="number">3</span> FF_DCT_MMX <span class="number">4</span> FF_DCT_MLIB <span class="number">5</span> FF_DCT_ALTIVEC</span><br><span class="line"></span><br><span class="line">-idct_algo algo 设置idct算法。可用的有 <span class="number">0</span> FF_IDCT_AUTO 缺省的IDCT <span class="number">1</span> FF_IDCT_INT <span class="number">2</span> FF_IDCT_SIMPLE <span class="number">3</span> FF_IDCT_SIMPLEMMX <span class="number">4</span> FF_IDCT_LIBMPEG2MMX <span class="number">5</span> FF_IDCT_PS2 <span class="number">6</span> FF_IDCT_MLIB <span class="number">7</span> FF_IDCT_ARM <span class="number">8</span> FF_IDCT_ALTIVEC <span class="number">9</span> FF_IDCT_SH4 <span class="number">10</span> FF_IDCT_SIMPLEARM</span><br><span class="line"></span><br><span class="line">-er n 设置错误残留为n <span class="number">1</span> FF_ER_CAREFULL 缺省 <span class="number">2</span> FF_ER_COMPLIANT <span class="number">3</span> FF_ER_AGGRESSIVE <span class="number">4</span> FF_ER_VERY_AGGRESSIVE</span><br><span class="line"></span><br><span class="line">-ec bit_mask 设置错误掩蔽为bit_mask,该值为如下值的位掩码 <span class="number">1</span> FF_EC_GUESS_MVS (default=enabled) <span class="number">2</span> FF_EC_DEBLOCK (default=enabled)</span><br><span class="line"></span><br><span class="line">-bf frames 使用frames B 帧，支持mpeg1,mpeg2,mpeg4</span><br><span class="line"></span><br><span class="line">-mbd mode 宏块决策 <span class="number">0</span> FF_MB_DECISION_SIMPLE 使用mb_cmp <span class="number">1</span> FF_MB_DECISION_BITS <span class="number">2</span> FF_MB_DECISION_RD</span><br><span class="line"></span><br><span class="line"><span class="number">-4</span>mv 使用<span class="number">4</span>个运动矢量 仅用于mpeg4</span><br><span class="line"></span><br><span class="line">-part 使用数据划分 仅用于mpeg4</span><br><span class="line"></span><br><span class="line">-bug param 绕过没有被自动监测到编码器的问题</span><br><span class="line"></span><br><span class="line">-strict strictness 跟标准的严格性</span><br><span class="line"></span><br><span class="line">-aic 使能高级帧内编码 h263+</span><br><span class="line"></span><br><span class="line">-umv 使能无限运动矢量 h263+</span><br><span class="line"></span><br><span class="line">-deinterlace 不采用交织方法</span><br><span class="line"></span><br><span class="line">-interlace 强迫交织法编码仅对mpeg2和mpeg4有效。当你的输入是交织的并且你想要保持交织以最小图像损失的时候采用该选项。可选的方法是不交织，但是损失更大</span><br><span class="line"></span><br><span class="line">-psnr 计算压缩帧的psnr</span><br><span class="line"></span><br><span class="line">-vstats 输出视频编码统计到vstats_hhmmss.log</span><br><span class="line"></span><br><span class="line">-vhook module 插入视频处理模块 module 包括了模块名和参数，用空格分开</span><br><span class="line"></span><br><span class="line"><span class="comment">### 音频选项 &#123;#audio-options&#125;</span></span><br><span class="line"></span><br><span class="line">-aframes number (output)  </span><br><span class="line">    设置输出文件音频帧数，是`-frames:a` 的别名</span><br><span class="line"></span><br><span class="line">-ab bitrate  </span><br><span class="line">    设置音频码率，声音比特率，-ac 设为立体声时要以一半比特率来设置，比如<span class="number">192</span>kbps 的就设置成<span class="number">96</span>，高品质音乐建议<span class="number">160</span>kbps(<span class="number">80</span>) 一上</span><br><span class="line"></span><br><span class="line">-ar freq  </span><br><span class="line">    设置音频采样率，一般设置<span class="number">44100</span></span><br><span class="line"></span><br><span class="line">-ac channels  </span><br><span class="line">    设置通道，声道数， 缺省为<span class="number">1</span>, <span class="number">1</span>为单声道，<span class="number">2</span>为立体声</span><br><span class="line"></span><br><span class="line">-an 不使用音频纪录</span><br><span class="line"></span><br><span class="line">-acodec codec</span><br><span class="line">    使用codec编解码，是`-codec:a`的别名</span><br></pre></td></tr></table></figure>
+<h2 id="音频-视频捕获选项"><a href="#音频-视频捕获选项" class="headerlink" title="音频/视频捕获选项"></a>音频/视频捕获选项</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">-vd device 设置视频捕获设备。比如/dev/video0</span><br><span class="line"></span><br><span class="line">-vc channel 设置视频捕获通道 DV1394专用</span><br><span class="line"></span><br><span class="line">-tvstd standard 设置电视标准 NTSC PAL(SECAM)</span><br><span class="line"></span><br><span class="line">-dv1394 设置DV1394捕获</span><br><span class="line"></span><br><span class="line">-av device 设置音频设备 比如/dev/dsp</span><br><span class="line"></span><br><span class="line"><span class="comment">### 高级选项 &#123;#advance-option&#125;</span></span><br><span class="line"></span><br><span class="line">-map file:stream 设置输入流映射</span><br><span class="line"></span><br><span class="line">-debug 打印特定调试信息</span><br><span class="line"></span><br><span class="line">-benchmark 为基准测试加入时间</span><br><span class="line"></span><br><span class="line">-hex 倾倒每一个输入包</span><br><span class="line"></span><br><span class="line">-bitexact 仅使用位精确算法 用于编解码测试</span><br><span class="line"></span><br><span class="line">-ps size 设置包大小，以bits为单位</span><br><span class="line"></span><br><span class="line">-re 以本地帧频读数据，主要用于模拟捕获设备</span><br><span class="line"></span><br><span class="line">-loop 循环输入流。只工作于图像流，用于ffserver测试</span><br></pre></td></tr></table></figure>
+<h1 id="附录1：ffmpeg-简略帮助"><a href="#附录1：ffmpeg-简略帮助" class="headerlink" title="附录1：ffmpeg 简略帮助"></a>附录1：ffmpeg 简略帮助</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">Hyper fast Audio <span class="keyword">and</span> Video encoder</span><br><span class="line">usage: ffmpeg [options] [[infile options] -i infile]... &#123;[outfile options] outfile&#125;...</span><br><span class="line"></span><br><span class="line">Getting help:</span><br><span class="line">    -h      -- <span class="keyword">print</span> basic options</span><br><span class="line">    -h long -- <span class="keyword">print</span> more options</span><br><span class="line">    -h full -- <span class="keyword">print</span> all options (including all format <span class="keyword">and</span> codec specific options, very long)</span><br><span class="line">    -h type=name -- <span class="keyword">print</span> all options <span class="keyword">for</span> the named decoder/encoder/demuxer/muxer/filter</span><br><span class="line">    See man ffmpeg <span class="keyword">for</span> detailed description of the options.</span><br><span class="line"></span><br><span class="line">Print help / information / capabilities:</span><br><span class="line">-L                  show license</span><br><span class="line">-h topic            show help</span><br><span class="line">-? topic            show help</span><br><span class="line">-help topic         show help</span><br><span class="line">--help topic        show help</span><br><span class="line">-version            show version</span><br><span class="line">-buildconf          show build configuration</span><br><span class="line">-formats            show available formats</span><br><span class="line">-devices            show available devices</span><br><span class="line">-codecs             show available codecs</span><br><span class="line">-decoders           show available decoders</span><br><span class="line">-encoders           show available encoders</span><br><span class="line">-bsfs               show available bit stream filters</span><br><span class="line">-protocols          show available protocols</span><br><span class="line">-filters            show available filters</span><br><span class="line">-pix_fmts           show available pixel formats</span><br><span class="line">-layouts            show standard channel layouts</span><br><span class="line">-sample_fmts        show available audio sample formats</span><br><span class="line">-colors             show available color names</span><br><span class="line">-sources device     list sources of the input device</span><br><span class="line">-sinks device       list sinks of the output device</span><br><span class="line">-hwaccels           show available HW acceleration methods</span><br><span class="line"></span><br><span class="line">Global options (affect whole program instead of just one file:</span><br><span class="line">-loglevel loglevel  set logging level</span><br><span class="line">-v loglevel         set logging level</span><br><span class="line">-report             generate a report</span><br><span class="line">-max_alloc bytes    set maximum size of a single allocated block</span><br><span class="line">-y                  overwrite output files</span><br><span class="line">-n                  never overwrite output files</span><br><span class="line">-ignore_unknown     Ignore unknown stream types</span><br><span class="line">-stats              <span class="keyword">print</span> progress report during encoding</span><br><span class="line">-max_error_rate ratio of errors (<span class="number">0.0</span>: no errors, <span class="number">1.0</span>: <span class="number">100</span>% error  maximum error rate</span><br><span class="line">-bits_per_raw_sample number  set the number of bits per raw sample</span><br><span class="line">-vol volume         change audio volume (<span class="number">256</span>=normal)</span><br><span class="line"></span><br><span class="line">Per-file main options:</span><br><span class="line">-f fmt              force format</span><br><span class="line">-c codec            codec name</span><br><span class="line">-codec codec        codec name</span><br><span class="line">-pre preset         preset name</span><br><span class="line">-map_metadata outfile[,metadata]:infile[,metadata]  set metadata information of outfile <span class="keyword">from</span> infile</span><br><span class="line">-t duration         record <span class="keyword">or</span> transcode <span class="string">"duration"</span> seconds of audio/video</span><br><span class="line">-to time_stop       record <span class="keyword">or</span> transcode stop time</span><br><span class="line">-fs limit_size      set the limit file size <span class="keyword">in</span> bytes</span><br><span class="line">-ss time_off        set the start time offset</span><br><span class="line">-sseof time_off     set the start time offset relative to EOF</span><br><span class="line">-seek_timestamp     enable/disable seeking by timestamp <span class="keyword">with</span> -ss</span><br><span class="line">-timestamp time     set the recording timestamp (<span class="string">'now'</span> to set the current time)</span><br><span class="line">-metadata string=string  add metadata</span><br><span class="line">-program title=string:st=number...  add program <span class="keyword">with</span> specified streams</span><br><span class="line">-target type        specify target file type (<span class="string">"vcd"</span>, <span class="string">"svcd"</span>, <span class="string">"dvd"</span>, <span class="string">"dv"</span> <span class="keyword">or</span> <span class="string">"dv50"</span> <span class="keyword">with</span> optional prefixes <span class="string">"pal-"</span>, <span class="string">"ntsc-"</span> <span class="keyword">or</span> <span class="string">"film-"</span>)</span><br><span class="line">-apad               audio pad</span><br><span class="line">-frames number      set the number of frames to output</span><br><span class="line">-filter filter_graph  set stream filtergraph</span><br><span class="line">-filter_script filename  read stream filtergraph description <span class="keyword">from</span> a file</span><br><span class="line">-reinit_filter      reinit filtergraph on input parameter changes</span><br><span class="line">-discard            discard</span><br><span class="line">-disposition        disposition</span><br><span class="line"></span><br><span class="line">Video options:</span><br><span class="line">-vframes number     set the number of video frames to output</span><br><span class="line">-r rate             set frame rate (Hz value, fraction <span class="keyword">or</span> abbreviation)</span><br><span class="line">-s size             set frame size (WxH <span class="keyword">or</span> abbreviation)</span><br><span class="line">-aspect aspect      set aspect ratio (<span class="number">4</span>:<span class="number">3</span>, <span class="number">16</span>:<span class="number">9</span> <span class="keyword">or</span> <span class="number">1.3333</span>, <span class="number">1.7777</span>)</span><br><span class="line">-bits_per_raw_sample number  set the number of bits per raw sample</span><br><span class="line">-vn                 disable video</span><br><span class="line">-vcodec codec       force video codec (<span class="string">'copy'</span> to copy stream)</span><br><span class="line">-timecode hh:mm:ss[:;.]ff  set initial TimeCode value.</span><br><span class="line">-<span class="keyword">pass</span> n             select the <span class="keyword">pass</span> number (<span class="number">1</span> to <span class="number">3</span>)</span><br><span class="line">-vf filter_graph    set video filters</span><br><span class="line">-ab bitrate         audio bitrate (please use -b:a)</span><br><span class="line">-b bitrate          video bitrate (please use -b:v)</span><br><span class="line">-dn                 disable data</span><br><span class="line"></span><br><span class="line">Audio options:</span><br><span class="line">-aframes number     set the number of audio frames to output</span><br><span class="line">-aq quality         set audio quality (codec-specific)</span><br><span class="line">-ar rate            set audio sampling rate (<span class="keyword">in</span> Hz)</span><br><span class="line">-ac channels        set number of audio channels</span><br><span class="line">-an                 disable audio</span><br><span class="line">-acodec codec       force audio codec (<span class="string">'copy'</span> to copy stream)</span><br><span class="line">-vol volume         change audio volume (<span class="number">256</span>=normal)</span><br><span class="line">-af filter_graph    set audio filters</span><br><span class="line"></span><br><span class="line">Subtitle options:</span><br><span class="line">-s size             set frame size (WxH <span class="keyword">or</span> abbreviation)</span><br><span class="line">-sn                 disable subtitle</span><br><span class="line">-scodec codec       force subtitle codec (<span class="string">'copy'</span> to copy stream)</span><br><span class="line">-stag fourcc/tag    force subtitle tag/fourcc</span><br><span class="line">-fix_sub_duration   fix subtitles duration</span><br><span class="line">-canvas_size size   set canvas size (WxH <span class="keyword">or</span> abbreviation)</span><br><span class="line">-spre preset        set the subtitle options to the indicated preset</span><br></pre></td></tr></table></figure>
+<h1 id="附录2：常用视频文件格式详解"><a href="#附录2：常用视频文件格式详解" class="headerlink" title="附录2：常用视频文件格式详解"></a>附录2：常用视频文件格式详解</h1><p>常见的视频格式：</p>
+<p>AVI格式 　　它的英文全称为Audio Video Interleaved，即音频视频交错格式。它于1992年被Microsoft公司推出，随Windows3.1一起被人们所认识和熟知。所谓“音频视频交错”，就是可以将视频和音频交织在一起进行同步播放。这种视频格式的优点是图像质量好，可以跨多个平台使用，但是其缺点是体积过于庞大，而且更加糟糕的是压缩标准不统一，因此经常会遇到高版本Windows媒体播放器播放不了采用早期编码编辑的AVI格式视频，而低版本Windows媒体播放器又播放不了采用最新编码编辑的AVI格式视频。其实解决的方法也非常简单，我们将在后面的视频转换、视频修复部分中给出解决的方案。</p>
+<p>DV-AVI格式 　　DV的英文全称是Digital Video Format，是由索尼、松下、JVC等多家厂商联合提出的一种家用数字视频格式。目前非常流行的数码摄像机就是使用这种格式记录视频数据的。它可以通过电脑的IEEE 1394端口传输视频数据到电脑，也可以将电脑中编辑好的的视频数据回录到数码摄像机中。这种视频格式的文件扩展名一般也是.avi，所以我们习惯地叫它为DV-AVI格式。</p>
+<p>MPEG格式 　　它的英文全称为Moving Picture Expert Group，即运动图像专家组格式，家里常看的VCD、SVCD、DVD就是这种格式。MPEG文件格式是运动图像压缩算法的国际标准，它采用了有损压缩方法从而减少运动图像中的冗余信息。MPEG的压缩方法说的更加深入一点就是保留相邻两幅画面绝大多数相同的部分，而把后续图像中和前面图像有冗余的部分去除，从而达到压缩的目的。目前MPEG格式有三个压缩标准，分别是MPEG-1、MPEG-2、和MPEG-4，另外，MPEG-7与MPEG-21仍处在研发阶段。 　　MPEG-1：制定于1992年，它是针对1.5Mbps以下数据传输率的数字存储媒体运动图像及其伴音编码而设计的国际标准。也就是我们通常所见到的VCD制作格式。这种视频格式的文件扩展名包括.mpg、.mlv、.mpe、.mpeg及VCD光盘中的.dat文件等。 　　MPEG-2：制定于1994年，设计目标为高级工业标准的图像质量以及更高的传输率。这种格式主要应用在DVD/SVCD的制作（压缩）方面，同时在一些HDTV（高清晰电视广播）和一些高要求视频编辑、处理上面也有相当的应用。这种视频格式的文件扩展名包括.mpg、.mpe、.mpeg、.m2v及DVD光盘上的.vob文件等。 　　MPEG-4：制定于1998年，MPEG-4是为了播放流式媒体的高质量视频而专门设计的，它可利用很窄的带度，通过帧重建技术，压缩和传输数据，以求使用最少的数据获得最佳的图像质量。MPEG-4最有吸引力的地方在于它能够保存接近于DVD画质的小体积视频文件。这种视频格式的文件扩展名包括.asf、.mov和DivX 、AVI等。</p>
+<p>DivX格式 　　这是由MPEG-4衍生出的另一种视频编码（压缩）标准，也即我们通常所说的DVDrip格式，它采用了MPEG4的压缩算法同时又综合了MPEG-4与MP3各方面的技术，说白了就是使用DivX压缩技术对DVD盘片的视频图像进行高质量压缩，同时用MP3或AC3对音频进行压缩，然后再将视频与音频合成并加上相应的外挂字幕文件而形成的视频格式。其画质直逼DVD并且体积只有DVD的数分之一。</p>
+<p>MOV格式 　　美国Apple公司开发的一种视频格式，默认的播放器是苹果的QuickTimePlayer。具有较高的压缩比率和较完美的视频清晰度等特点，但是其最大的特点还是跨平台性，即不仅能支持MacOS，同样也能支持Windows系列。</p>
+<p>ASF格式 　　它的英文全称为Advanced Streaming format，它是微软为了和现在的Real Player竞争而推出的一种视频格式，用户可以直接使用Windows自带的Windows Media Player对其进行播放。由于它使用了MPEG-4的压缩算法，所以压缩率和图像的质量都很不错。</p>
+<p>WMF格式 　　它的英文全称为Windows Media Video，也是微软推出的一种采用独立编码方式并且可以直接在网上实时观看视频节目的文件压缩格式。WMV格式的主要优点包括：本地或网络回放、可扩充的媒体类型、可伸缩的媒体类型、多语言支持、环境独立性、丰富的流间关系以及扩展性等。</p>
+<p>RM格式 　　Networks公司所制定的音频视频压缩规范称之为Real Media，用户可以使用RealPlayer或RealOne Player对符合RealMedia技术规范的网络音频/视频资源进行实况转播，并且RealMedia还可以根据不同的网络传输速率制定出不同的压缩比率，从而实现在低速率的网络上进行影像数据实时传送和播放。这种格式的另一个特点是用户使用RealPlayer或RealOne Player播放器可以在不下载音频/视频内容的条件下实现在线播放。</p>
+<p>RMVB格式 　　这是一种由RM视频格式升级延伸出的新视频格式，它的先进之处在于RMVB视频格式打破了原先RM格式那种平均压缩采样的方式，在保证平均压缩比的基础上合理利用比特率资源，就是说静止和动作场面少的画面场景采用较低的编码速率，这样可以留出更多的带宽空间，而这些带宽会在出现快速运动的画面场景时被利用。这样在保证了静止画面质量的前提下，大幅地提高了运动图像的画面质量，从而图像质量和文件大小之间就达到了微妙的平衡。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://mrhanlon.com/posts/convert-an-mp4-to-gif-with-ffmpeg/" target="_blank" rel="noopener">https://mrhanlon.com/posts/convert-an-mp4-to-gif-with-ffmpeg/</a><br><a href="http://superuser.com/questions/436056/how-can-i-get-ffmpeg-to-convert-a-mov-to-a-gif" target="_blank" rel="noopener">http://superuser.com/questions/436056/how-can-i-get-ffmpeg-to-convert-a-mov-to-a-gif</a><br><a href="http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html" target="_blank" rel="noopener">http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html</a><br>Related Posts</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        
+  
+<div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>很惭愧，只是做了一点微小的工作:)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span><smaller>Donate</smaller></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WxQRCode.png" alt="Berry WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliQRCode.png" alt="Berry Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+
+      </div>
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Berry
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://xiabanle.me/archives/2530a991.html" title="图像处理5-视频-图片切换ffmpeg">http://xiabanle.me/archives/2530a991.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据处理/" rel="tag"><i class="fa fa-tag"></i> 数据处理</a>
+          
+            <a href="/tags/图像处理/" rel="tag"><i class="fa fa-tag"></i> 图像处理</a>
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/fd12ced4.html" rel="next" title="图像处理3-裁剪图片">
+                <i class="fa fa-chevron-left"></i> 图像处理3-裁剪图片
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/1616918e.html" rel="prev" title="1.python程序打包成.exe可执行文件">
+                1.python程序打包成.exe可执行文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_gmail"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_pocket"></a>
+  <a class="jiathis_button_reddit"></a>
+  <!--<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>-->
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    shortUrl:true,
+    hideMore:true
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Berry">
+          <p class="site-author-name" itemprop="name">Berry</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yuyukuang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/yu-yu-69-99-39/activities" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Zhihu
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5198381591" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Others
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://foreti.me/" title="Mr.Right" target="_blank">Mr.Right</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#视频-图像切换"><span class="nav-number">1.</span> <span class="nav-text">视频-图像切换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#几个概念"><span class="nav-number">1.1.</span> <span class="nav-text">几个概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#比特率"><span class="nav-number">1.1.1.</span> <span class="nav-text">比特率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可变码率"><span class="nav-number">1.1.2.</span> <span class="nav-text">可变码率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#固定码率"><span class="nav-number">1.1.3.</span> <span class="nav-text">固定码率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#帧数"><span class="nav-number">1.1.4.</span> <span class="nav-text">帧数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分辨率"><span class="nav-number">1.1.5.</span> <span class="nav-text">分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采样率"><span class="nav-number">1.1.6.</span> <span class="nav-text">采样率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装ffmpeg"><span class="nav-number">2.</span> <span class="nav-text">安装ffmpeg</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ffmpeg用法举例"><span class="nav-number">3.</span> <span class="nav-text">ffmpeg用法举例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#显示文件信息"><span class="nav-number">3.1.</span> <span class="nav-text">显示文件信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量截图"><span class="nav-number">3.2.</span> <span class="nav-text">批量截图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片合成视频"><span class="nav-number">3.3.</span> <span class="nav-text">图片合成视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从视频中提取音频"><span class="nav-number">3.4.</span> <span class="nav-text">从视频中提取音频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将声音合成到视频"><span class="nav-number">3.5.</span> <span class="nav-text">将声音合成到视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转化格式"><span class="nav-number">3.6.</span> <span class="nav-text">转化格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视频切片操作"><span class="nav-number">3.7.</span> <span class="nav-text">视频切片操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加速减速视频"><span class="nav-number">3.8.</span> <span class="nav-text">加速减速视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视频截图"><span class="nav-number">3.9.</span> <span class="nav-text">视频截图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合成-gif"><span class="nav-number">3.10.</span> <span class="nav-text">合成 gif</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看ffmpeg支持格式"><span class="nav-number">3.11.</span> <span class="nav-text">查看ffmpeg支持格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用ffmpeg屏幕录制"><span class="nav-number">3.12.</span> <span class="nav-text">利用ffmpeg屏幕录制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加水印"><span class="nav-number">3.13.</span> <span class="nav-text">添加水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ffmpeg使用语法"><span class="nav-number">3.14.</span> <span class="nav-text">ffmpeg使用语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通用选项"><span class="nav-number">3.15.</span> <span class="nav-text">通用选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要选项"><span class="nav-number">3.16.</span> <span class="nav-text">主要选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级视频选项"><span class="nav-number">3.17.</span> <span class="nav-text">高级视频选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#音频-视频捕获选项"><span class="nav-number">3.18.</span> <span class="nav-text">音频/视频捕获选项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录1：ffmpeg-简略帮助"><span class="nav-number">4.</span> <span class="nav-text">附录1：ffmpeg 简略帮助</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录2：常用视频文件格式详解"><span class="nav-number">5.</span> <span class="nav-text">附录2：常用视频文件格式详解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      <!--/noindex-->
+      
+	
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Berry</span>
+  <div class="theme-info">
+  <div class="powered-by"></div>
+  Source -
+  <a class="theme-link" href="https://github.com/kuangyuyu" rel="external nofollow">
+    Github
+  </a>
+  </div>
+</div>
+
+
+<div class="powered-by">
+  <span class="with-love"><i class="fa fa-eye"></i></span>
+  <span id="busuanzi_value_site_pv"></span>
+</div>
+<div class="powered-by">
+<span class="with-love"><i class="fa fa-user"></i></span>
+<span id="busuanzi_value_site_uv"></span>
+</div>
+
+<div class="theme-info">
+  <span class="post-count">博客全站共63.4k字</span>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'yuyukuang',
+            repo: 'yuyukuang.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '24f0c110e76adae44857d5d7102e3f1adc165659',
+            
+                client_id: '23956de71da002280330'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("mDclo4WLTcm4dNVtpl2oWUtw-gzGzoHsz", "E4XnzAo4x7eti6TsKzjmuPBC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!--移动端判断，是否引入DaoVoice-->
+<script>
+var browser={  
+    versions:function(){   
+           var u = navigator.userAgent, app = navigator.appVersion;   
+           return {//移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+            };  
+         }(),  
+         language:(navigator.browserLanguage || navigator.language).toLowerCase()  
+}   
+  if(browser.versions.mobile || browser.versions.ios || browser.versions.android ||   
+    browser.versions.iPhone || browser.versions.iPad){        
+             
+  }else{
+    
+
+  }
+</script>
+  
+</body>
+</html>

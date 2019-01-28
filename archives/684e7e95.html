@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="55t7k88xERfdEg6G3LD_kVq4ZhIwTqrpDG6ae3QW96E">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="yY5pucysgo">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="python,主题建模,NLP,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Little Tail" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="用LSA,PLSA,LDA和ida2vec进行主题建模在自然语言理解任务中，我们可以通过一系列的层次来提取含义——从单词、句子、段落，再到文档。在文档层面，理解文本最有效的方式之一就是分析其主题。 在文档集合中学习、识别和提取这些主题的过程被称为主题建模。 在本文中，我们将通过 4 种最流行的技术来探讨主题建模，它们分别是：LSA、pLSA、LDA，以及最新的、基于深度学习的 lda2vec。 概">
+<meta name="keywords" content="python,主题建模,NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NLP-1.用LSA,PLSA,LDA和ida2vec进行主题建模">
+<meta property="og:url" content="http://xiabanle.me/archives/684e7e95.html">
+<meta property="og:site_name" content="Little Tail">
+<meta property="og:description" content="用LSA,PLSA,LDA和ida2vec进行主题建模在自然语言理解任务中，我们可以通过一系列的层次来提取含义——从单词、句子、段落，再到文档。在文档层面，理解文本最有效的方式之一就是分析其主题。 在文档集合中学习、识别和提取这些主题的过程被称为主题建模。 在本文中，我们将通过 4 种最流行的技术来探讨主题建模，它们分别是：LSA、pLSA、LDA，以及最新的、基于深度学习的 lda2vec。 概">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0ovAo36ibWvSFEznnhQBBFiaibUicaQM3hos3KYY44unKcZgD78FZQjfPLA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0DT6SCbWWib2Tgw2AdS6m8alxiaA6dmJuRm6Tmd6IIeiapcS6v1LKFOWxw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0ZDEBR2JcMWmoWM0DAHepZ7SBMcR8TGFNf84fwCB4NDwFLQibBCKrOUg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0oasIEAM2Wg56D8ZocIibGFks4Z7zytR3l8pn8VfKBUYUqBBQNETRPRQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0dn2J7RibByqEjibGd6kLI90Klq7ib5cSsMJ6lx6hN2STh3bfzOjyXlydg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0dn2J7RibByqEjibGd6kLI90Klq7ib5cSsMJ6lx6hN2STh3bfzOjyXlydg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0fGlxDo5tGy0oQzdSwwVtvw4xjyzdQxXofuzo2m8cKZApmgfV5JS38g/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY00Spjk6AZRBROaV4FyibmGaOjIlnoPiaSHRiclumLLXrPItwWnC4uRAALQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0nyIRBeaaOjoq4rj9yibUFyibPRNKlTib6ceQCMHLYNhibfial6QTZebAIyQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY08DKZYtofxfncvhXicVmUIf36J0iblR96HAFbkdx1v8cJTFibX7SUHqiaIg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY07srjXyPdnWcv9nRawrnbsdibHFYbcLToxW0PYMlgibzq8HMWrPCZaxBw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0kFsUrdTxtVNOHZtZTqBtnAl5jDQHmJLtt6OmMkFRf18PBXSpLNicia7Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0IgFYfGEkt7fHHKLOW2r2f0niah8ylHVwIhhBlsREVicYTKCVnkeW8ugQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1">
+<meta property="og:updated_time" content="2019-01-28T15:42:56.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLP-1.用LSA,PLSA,LDA和ida2vec进行主题建模">
+<meta name="twitter:description" content="用LSA,PLSA,LDA和ida2vec进行主题建模在自然语言理解任务中，我们可以通过一系列的层次来提取含义——从单词、句子、段落，再到文档。在文档层面，理解文本最有效的方式之一就是分析其主题。 在文档集合中学习、识别和提取这些主题的过程被称为主题建模。 在本文中，我们将通过 4 种最流行的技术来探讨主题建模，它们分别是：LSA、pLSA、LDA，以及最新的、基于深度学习的 lda2vec。 概">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0ovAo36ibWvSFEznnhQBBFiaibUicaQM3hos3KYY44unKcZgD78FZQjfPLA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiabanle.me/archives/684e7e95.html">
+
+
+
+
+
+  <title>NLP-1.用LSA,PLSA,LDA和ida2vec进行主题建模 | Little Tail</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?0f0daeaed626293d9c84d4ebb98cb655";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Little Tail</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Berry's Blogs</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiabanle.me/archives/684e7e95.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Berry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Little Tail">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">NLP-1.用LSA,PLSA,LDA和ida2vec进行主题建模</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-08T18:50:02+00:00">
+                2018-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index">
+                    <span itemprop="name">NLP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/archives/684e7e95.html" class="leancloud_visitors" data-flag-title="NLP-1.用LSA,PLSA,LDA和ida2vec进行主题建模">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读量： </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  3,639
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="用LSA-PLSA-LDA和ida2vec进行主题建模"><a href="#用LSA-PLSA-LDA和ida2vec进行主题建模" class="headerlink" title="用LSA,PLSA,LDA和ida2vec进行主题建模"></a>用LSA,PLSA,LDA和ida2vec进行主题建模</h1><p>在自然语言理解任务中，我们可以通过一系列的层次来提取含义——从单词、句子、段落，再到文档。在文档层面，理解文本最有效的方式之一就是分析其主题。</p>
+<p>在文档集合中学习、识别和提取这些主题的过程被称为主题建模。</p>
+<p>在本文中，我们将通过 4 种最流行的技术来探讨主题建模，它们分别是：LSA、pLSA、LDA，以及最新的、基于深度学习的 lda2vec。</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所有主题模型都基于相同的基本假设：</p>
+<p>每个文档包含多个主题；<br>每个主题包含多个单词。</p>
+<p>换句话说，主题模型围绕着以下观点构建：实际上，文档的语义由一些我们所忽视的隐变量或「潜」变量管理。</p>
+<p>因此，主题建模的目标就是揭示这些潜在变量——也就是主题，正是它们塑造了我们文档和语料库的含义。</p>
+<h1 id="LSA"><a href="#LSA" class="headerlink" title="LSA"></a>LSA</h1><p>潜在语义分析（LSA）是主题建模的基础技术之一。</p>
+<p>其核心思想是把我们所拥有的文档-术语矩阵分解成相互独立的文档-主题矩阵和主题-术语矩阵。</p>
+<p>第一步是生成文档-术语矩阵。如果在词汇表中给出 m 个文档和 n 个单词，我们可以构造一个 m×n 的矩阵 A，其中每行代表一个文档，每列代表一个单词。在 LSA 的最简单版本中，每一个条目可以简单地是第 j 个单词在第 i 个文档中出现次数的原始计数。然而，在实际操作中，原始计数的效果不是很好，因为它们无法考虑文档中每个词的权重。例如，比起「test」来说，「nuclear」这个单词也许更能指出给定文章的主题。</p>
+<p>因此，LSA 模型通常用 tf-idf 得分代替文档-术语矩阵中的原始计数。tf-idf，即词频-逆文本频率指数，为文档 i 中的术语 j 分配了相应的权重，如下所示：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0ovAo36ibWvSFEznnhQBBFiaibUicaQM3hos3KYY44unKcZgD78FZQjfPLA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>直观地说，术语出现在文档中的频率越高，则其权重越大；同时，术语在语料库中出现的频率越低，其权重越大。</p>
+<p>一旦拥有文档-术语矩阵 A，我们就可以开始思考潜在主题。问题在于：A 极有可能非常稀疏、噪声很大，并且在很多维度上非常冗余。因此，为了找出能够捕捉单词和文档关系的少数潜在主题，我们希望能降低矩阵 A 的维度。</p>
+<p>这种降维可以使用截断 SVD 来执行。</p>
+<p>SVD，即奇异值分解，是线性代数中的一种技术。该技术将任意矩阵 M 分解为三个独立矩阵的乘积：M=U<em>S</em>V，其中 S 是矩阵 M 奇异值的对角矩阵。</p>
+<p>很大程度上，截断 SVD 的降维方式是：选择奇异值中最大的 t 个数，且只保留矩阵 U 和 V 的前 t 列。在这种情况下，t 是一个超参数，我们可以根据想要查找的主题数量进行选择和调整。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0DT6SCbWWib2Tgw2AdS6m8alxiaA6dmJuRm6Tmd6IIeiapcS6v1LKFOWxw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>直观来说，截断 SVD 可以看作只保留我们变换空间中最重要的 t 维。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0ZDEBR2JcMWmoWM0DAHepZ7SBMcR8TGFNf84fwCB4NDwFLQibBCKrOUg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>在这种情况下，U∈ℝ^（m⨉t）是我们的文档-主题矩阵，而 V∈ℝ^（n⨉t）则成为我们的术语-主题矩阵。在矩阵 U 和 V 中，每一列对应于我们 t 个主题当中的一个。在 U 中，行表示按主题表达的文档向量；在 V 中，行代表按主题表达的术语向量。</p>
+<p>通过这些文档向量和术语向量，现在我们可以轻松应用余弦相似度等度量来评估以下指标：</p>
+<p>不同文档的相似度</p>
+<p>不同单词的相似度</p>
+<p>术语（或「queries」）与文档的相似度（当我们想要检索与查询最相关的段落，即进行信息检索时，这一点将非常有用）</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>在 sklearn 中，LSA 的简单实现可能如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> TruncatedSVD</span><br><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line">documents = [<span class="string">"doc1.txt"</span>, <span class="string">"doc2.txt"</span>, <span class="string">"doc3.txt"</span>] </span><br><span class="line"></span><br><span class="line"><span class="comment"># raw documents to tf-idf matrix: </span></span><br><span class="line">vectorizer = TfidfVectorizer(stop_words=<span class="string">'english'</span>, </span><br><span class="line">                             use_idf=<span class="keyword">True</span>, </span><br><span class="line">                             smooth_idf=<span class="keyword">True</span>)</span><br><span class="line"><span class="comment"># SVD to reduce dimensionality: </span></span><br><span class="line">svd_model = TruncatedSVD(n_components=<span class="number">100</span>,         // num dimensions</span><br><span class="line">                         algorithm=<span class="string">'randomized'</span>,</span><br><span class="line">                         n_iter=<span class="number">10</span>)</span><br><span class="line"><span class="comment"># pipeline of tf-idf + SVD, fit to and applied to documents:</span></span><br><span class="line">svd_transformer = Pipeline([(<span class="string">'tfidf'</span>, vectorizer), </span><br><span class="line">                            (<span class="string">'svd'</span>, svd_model)])</span><br><span class="line">svd_matrix = svd_transformer.fit_transform(documents)</span><br><span class="line"></span><br><span class="line"><span class="comment"># svd_matrix can later be used to compare documents, compare words, or compare queries with documents</span></span><br></pre></td></tr></table></figure></p>
+<p>LSA 方法快速且高效，但它也有一些主要缺点：</p>
+<ol>
+<li><p>缺乏可解释的嵌入（我们并不知道主题是什么，其成分可能积极或消极，这一点是随机的）</p>
+</li>
+<li><p>需要大量的文件和词汇来获得准确的结果</p>
+</li>
+<li><p>表征效率低</p>
+</li>
+</ol>
+<h1 id="PLSA"><a href="#PLSA" class="headerlink" title="PLSA"></a>PLSA</h1><p>pLSA，即概率潜在语义分析，采取概率方法替代 SVD 以解决问题。其核心思想是找到一个潜在主题的概率模型，该模型可以生成我们在文档-术语矩阵中观察到的数据。特别是，我们需要一个模型 P(D,W)，使得对于任何文档 d 和单词 w，P(d,w) 能对应于文档-术语矩阵中的那个条目。</p>
+<p>让我们回想主题模型的基本假设：每个文档由多个主题组成，每个主题由多个单词组成。pLSA 为这些假设增加了概率自旋：</p>
+<p>给定文档 d，主题 z 以 P(z|d) 的概率出现在该文档中</p>
+<p>给定主题 z，单词 w 以 P(w|z) 的概率从主题 z 中提取出来</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0oasIEAM2Wg56D8ZocIibGFks4Z7zytR3l8pn8VfKBUYUqBBQNETRPRQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>从形式上看，一个给定的文档和单词同时出现的联合概率是：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0dn2J7RibByqEjibGd6kLI90Klq7ib5cSsMJ6lx6hN2STh3bfzOjyXlydg/640?wx_fmt=gif&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>直观来说，等式右边告诉我们理解某个文档的可能性有多大；然后，根据该文档主题的分布情况，在该文档中找到某个单词的可能性有多大。</p>
+<p>在这种情况下，P(D)、P(Z|D)、和 P(W|Z) 是我们模型的参数。P(D) 可以直接由我们的语料库确定。P(Z|D) 和 P(W|Z) 利用了多项式分布建模，并且可以使用期望最大化算法（EM）进行训练。EM 无需进行算法的完整数学处理，而是一种基于未观测潜变量（此处指主题）的模型找到最可能的参数估值的方法。</p>
+<p>有趣的是，P(D,W) 可以利用不同的的 3 个参数等效地参数化：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0dn2J7RibByqEjibGd6kLI90Klq7ib5cSsMJ6lx6hN2STh3bfzOjyXlydg/640?wx_fmt=gif&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>可以通过将模型看作一个生成过程来理解这种等价性。在第一个参数化过程中，我们从概率为 P(d) 的文档开始，然后用 P(z|d) 生成主题，最后用 P(w|z) 生成单词。而在上述这个参数化过程中，我们从 P(z) 开始，再用 P(d|z) 和 P(w|z) 单独生成文档。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0fGlxDo5tGy0oQzdSwwVtvw4xjyzdQxXofuzo2m8cKZApmgfV5JS38g/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>这个新参数化方法非常有趣，因为我们可以发现 pLSA 模型和 LSA 模型之间存在一个直接的平行对应关系：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY00Spjk6AZRBROaV4FyibmGaOjIlnoPiaSHRiclumLLXrPItwWnC4uRAALQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>其中，主题 P(Z) 的概率对应于奇异主题概率的对角矩阵，给定主题 P(D|Z) 的文档概率对应于文档-主题矩阵 U，给定主题 P(W|Z) 的单词概率对应于术语-主题矩阵 V。</p>
+<p>那么，这说明了什么？尽管 pLSA 看起来与 LSA 差异很大、且处理问题的方法完全不同，但实际上 pLSA 只是在 LSA 的基础上添加了对主题和词汇的概率处理罢了。pLSA 是一个更加灵活的模型，但仍然存在一些问题，尤其表现为：</p>
+<p>因为我们没有参数来给 P(D) 建模，所以不知道如何为新文档分配概率</p>
+<p>pLSA 的参数数量随着我们拥有的文档数线性增长，因此容易出现过度拟合问题</p>
+<p>我们将不会考虑任何 pLSA 的代码，因为很少会单独使用 pLSA。一般来说，当人们在寻找超出 LSA 基准性能的主题模型时，他们会转而使用 LDA 模型。LDA 是最常见的主题模型，它在 pLSA 的基础上进行了扩展，从而解决这些问题。</p>
+<h1 id="LDA"><a href="#LDA" class="headerlink" title="LDA"></a>LDA</h1><p>LDA 即潜在狄利克雷分布，是 pLSA 的贝叶斯版本。它使用狄利克雷先验来处理文档-主题和单词-主题分布，从而有助于更好地泛化。</p>
+<p>我不打算深入讲解狄利克雷分布，不过，我们可以对其做一个简短的概述：即，将狄利克雷视为「分布的分布」。本质上，它回答了这样一个问题：「给定某种分布，我看到的实际概率分布可能是什么样子？」</p>
+<p>考虑比较主题混合概率分布的相关例子。假设我们正在查看的语料库有着来自 3 个完全不同主题领域的文档。如果我们想对其进行建模，我们想要的分布类型将有着这样的特征：它在其中一个主题上有着极高的权重，而在其他的主题上权重不大。如果我们有 3 个主题，那么我们看到的一些具体概率分布可能会是：</p>
+<p>混合 X：90% 主题 A，5% 主题 B，5% 主题 C</p>
+<p>混合 Y：5% 主题 A，90% 主题 B，5% 主题 C</p>
+<p>混合 Z：5% 主题 A，5% 主题 B，90% 主题 C</p>
+<p>如果从这个狄利克雷分布中绘制一个随机概率分布，并对单个主题上的较大权重进行参数化，我们可能会得到一个与混合 X、Y 或 Z 非常相似的分布。我们不太可能会抽样得到这样一个分布：33％的主题 A，33％的主题 B 和 33％的主题 C。</p>
+<p>本质上，这就是狄利克雷分布所提供的：一种特定类型的抽样概率分布法。我们可以回顾一下 pLSA 的模型：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0nyIRBeaaOjoq4rj9yibUFyibPRNKlTib6ceQCMHLYNhibfial6QTZebAIyQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>在 pLSA 中，我们对文档进行抽样，然后根据该文档抽样主题，再根据该主题抽样一个单词。以下是 LDA 的模型：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY08DKZYtofxfncvhXicVmUIf36J0iblR96HAFbkdx1v8cJTFibX7SUHqiaIg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>根据狄利克雷分布 Dir(α)，我们绘制一个随机样本来表示特定文档的主题分布或主题混合。这个主题分布记为θ。我们可以基于分布从θ选择一个特定的主题 Z。</p>
+<p>接下来，从另一个狄利克雷分布 Dir(𝛽)，我们选择一个随机样本来表示主题 Z 的单词分布。这个单词分布记为φ。从φ中，我们选择单词 w。</p>
+<p>从形式上看，从文档生成每个单词的过程如下（注意，该算法使用 c 而不是 z 来表示主题）：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY07srjXyPdnWcv9nRawrnbsdibHFYbcLToxW0PYMlgibzq8HMWrPCZaxBw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>通常而言，LDA 比 pLSA 效果更好，因为它可以轻而易举地泛化到新文档中去。在 pLSA 中，文档概率是数据集中的一个固定点。如果没有看到那个文件，我们就没有那个数据点。然而，在 LDA 中，数据集作为训练数据用于文档-主题分布的狄利克雷分布。即使没有看到某个文件，我们可以很容易地从狄利克雷分布中抽样得来，并继续接下来的操作。</p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><p>LDA 无疑是最受欢迎（且通常来说是最有效的）主题建模技术。它在 gensim 当中可以方便地使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> gensim.corpora.Dictionary <span class="keyword">import</span> load_from_text, doc2bow</span><br><span class="line"><span class="keyword">from</span> gensim.corpora <span class="keyword">import</span> MmCorpus</span><br><span class="line"><span class="keyword">from</span> gensim.models.ldamodel <span class="keyword">import</span> LdaModel</span><br><span class="line">document = <span class="string">"This is some document..."</span></span><br><span class="line"><span class="comment"># load id-&gt;word mapping (the dictionary)</span></span><br><span class="line">id2word = load_from_text(<span class="string">'wiki_en_wordids.txt'</span>)</span><br><span class="line"><span class="comment"># load corpus iterator</span></span><br><span class="line">mm = MmCorpus(<span class="string">'wiki_en_tfidf.mm'</span>)</span><br><span class="line"><span class="comment"># extract 100 LDA topics, updating once every 10,000</span></span><br><span class="line">lda = LdaModel(corpus=mm, id2word=id2word, num_topics=<span class="number">100</span>, update_every=<span class="number">1</span>, chunksize=<span class="number">10000</span>, passes=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># use LDA model: transform new doc to bag-of-words, then apply lda</span></span><br><span class="line">doc_bow = doc2bow(document.split())</span><br><span class="line">doc_lda = lda[doc_bow]</span><br><span class="line"><span class="comment"># doc_lda is vector of length num_topics representing weighted presence of each topic in the doc</span></span><br></pre></td></tr></table></figure>
+<p>通过使用 LDA，我们可以从文档语料库中提取人类可解释的主题，其中每个主题都以与之关联度最高的词语作为特征。例如，主题 2 可以用诸如「石油、天然气、钻井、管道、楔石、能量」等术语来表示。此外，在给定一个新文档的条件下，我们可以获得表示其主题混合的向量，例如，5％ 的主题 1，70％ 的主题 2，10％的主题 3 等。通常来说，这些向量对下游应用非常有用。</p>
+<h1 id="深度学习中的-LDA：lda2vec"><a href="#深度学习中的-LDA：lda2vec" class="headerlink" title="深度学习中的 LDA：lda2vec"></a>深度学习中的 LDA：lda2vec</h1><p>那么，这些主题模型会将哪些因素纳入更复杂的自然语言处理问题中呢？</p>
+<p>在文章的开头，我们谈到能够从每个级别的文本（单词、段落、文档）中提取其含义是多么重要。在文档层面，我们现在知道如何将文本表示为主题的混合。在单词级别上，我们通常使用诸如 word2vec 之类的东西来获取其向量表征。lda2vec 是 word2vec 和 LDA 的扩展，它共同学习单词、文档和主题向量。</p>
+<p>以下是其工作原理。</p>
+<p>lda2vec 专门在 word2vec 的 skip-gram 模型基础上建模，以生成单词向量。skip-gram 和 word2vec 本质上就是一个神经网络，通过利用输入单词预测周围上下文词语的方法来学习词嵌入。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0kFsUrdTxtVNOHZtZTqBtnAl5jDQHmJLtt6OmMkFRf18PBXSpLNicia7Q/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+<p>通过使用 lda2vec，我们不直接用单词向量来预测上下文单词，而是使用上下文向量来进行预测。该上下文向量被创建为两个其它向量的总和：单词向量和文档向量。</p>
+<p>单词向量由前面讨论过的 skip-gram word2vec 模型生成。而文档向量更有趣，它实际上是下列两个组件的加权组合：</p>
+<p>文档权重向量，表示文档中每个主题的「权重」（稍后将转换为百分比）</p>
+<p>主题矩阵，表示每个主题及其相应向量嵌入</p>
+<p>文档向量和单词向量协同起来，为文档中的每个单词生成「上下文」向量。lda2vec 的强大之处在于，它不仅能学习单词的词嵌入（和上下文向量嵌入），还同时学习主题表征和文档表征。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/KmXPKA19gW9J6ob2AFQ1OajPLGGStYY0IgFYfGEkt7fHHKLOW2r2f0niah8ylHVwIhhBlsREVicYTKCVnkeW8ugQ/640?wx_fmt=gif&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        
+  
+<div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>很惭愧，只是做了一点微小的工作:)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span><smaller>Donate</smaller></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WxQRCode.png" alt="Berry WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliQRCode.png" alt="Berry Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+
+      </div>
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Berry
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://xiabanle.me/archives/684e7e95.html" title="NLP-1.用LSA,PLSA,LDA和ida2vec进行主题建模">http://xiabanle.me/archives/684e7e95.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+            <a href="/tags/主题建模/" rel="tag"><i class="fa fa-tag"></i> 主题建模</a>
+          
+            <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/1616918e.html" rel="next" title="1.python程序打包成.exe可执行文件">
+                <i class="fa fa-chevron-left"></i> 1.python程序打包成.exe可执行文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/b810f7cc.html" rel="prev" title="2.python处理.csv文件">
+                2.python处理.csv文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_gmail"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_pocket"></a>
+  <a class="jiathis_button_reddit"></a>
+  <!--<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>-->
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    shortUrl:true,
+    hideMore:true
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Berry">
+          <p class="site-author-name" itemprop="name">Berry</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yuyukuang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/yu-yu-69-99-39/activities" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Zhihu
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5198381591" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Others
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://foreti.me/" title="Mr.Right" target="_blank">Mr.Right</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用LSA-PLSA-LDA和ida2vec进行主题建模"><span class="nav-number">1.</span> <span class="nav-text">用LSA,PLSA,LDA和ida2vec进行主题建模</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LSA"><span class="nav-number">3.</span> <span class="nav-text">LSA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">3.0.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#PLSA"><span class="nav-number">4.</span> <span class="nav-text">PLSA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LDA"><span class="nav-number">5.</span> <span class="nav-text">LDA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现-1"><span class="nav-number">5.0.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深度学习中的-LDA：lda2vec"><span class="nav-number">6.</span> <span class="nav-text">深度学习中的 LDA：lda2vec</span></a></li></div>
+            
+          </div>
+        </section>
+      <!--/noindex-->
+      
+	
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Berry</span>
+  <div class="theme-info">
+  <div class="powered-by"></div>
+  Source -
+  <a class="theme-link" href="https://github.com/kuangyuyu" rel="external nofollow">
+    Github
+  </a>
+  </div>
+</div>
+
+
+<div class="powered-by">
+  <span class="with-love"><i class="fa fa-eye"></i></span>
+  <span id="busuanzi_value_site_pv"></span>
+</div>
+<div class="powered-by">
+<span class="with-love"><i class="fa fa-user"></i></span>
+<span id="busuanzi_value_site_uv"></span>
+</div>
+
+<div class="theme-info">
+  <span class="post-count">博客全站共63.4k字</span>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'yuyukuang',
+            repo: 'yuyukuang.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '24f0c110e76adae44857d5d7102e3f1adc165659',
+            
+                client_id: '23956de71da002280330'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("mDclo4WLTcm4dNVtpl2oWUtw-gzGzoHsz", "E4XnzAo4x7eti6TsKzjmuPBC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!--移动端判断，是否引入DaoVoice-->
+<script>
+var browser={  
+    versions:function(){   
+           var u = navigator.userAgent, app = navigator.appVersion;   
+           return {//移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+            };  
+         }(),  
+         language:(navigator.browserLanguage || navigator.language).toLowerCase()  
+}   
+  if(browser.versions.mobile || browser.versions.ios || browser.versions.android ||   
+    browser.versions.iPhone || browser.versions.iPad){        
+             
+  }else{
+    
+
+  }
+</script>
+  
+</body>
+</html>

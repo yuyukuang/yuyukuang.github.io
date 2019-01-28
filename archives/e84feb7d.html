@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="55t7k88xERfdEg6G3LD_kVq4ZhIwTqrpDG6ae3QW96E">
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="yY5pucysgo">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="深度学习,算法,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Little Tail" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="前言生成对抗网络（GAN）一经提出就风光无限，更是被Yann Lecun誉为“十年来机器学习领域最有趣的想法”。 GAN“左右互搏”的理念几乎众所周知，但正如卷积神经网络（CNN）一样，GAN发展至今已经衍生出了诸多变化形态。 今天，文摘菌就来为大家盘点一下GAN大家庭中各具特色的成员们。 他们的名单如下： 1.DCGANs 2.Improved DCGANs 3.Conditional GANs">
+<meta name="keywords" content="深度学习,算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习笔记（七）：GAN">
+<meta property="og:url" content="http://xiabanle.me/archives/e84feb7d.html">
+<meta property="og:site_name" content="Little Tail">
+<meta property="og:description" content="前言生成对抗网络（GAN）一经提出就风光无限，更是被Yann Lecun誉为“十年来机器学习领域最有趣的想法”。 GAN“左右互搏”的理念几乎众所周知，但正如卷积神经网络（CNN）一样，GAN发展至今已经衍生出了诸多变化形态。 今天，文摘菌就来为大家盘点一下GAN大家庭中各具特色的成员们。 他们的名单如下： 1.DCGANs 2.Improved DCGANs 3.Conditional GANs">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424777/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424778/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424779/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424780/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424781/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424782/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424783/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424784/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424786/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424787/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424788/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424789/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424790/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424791/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424792/641">
+<meta property="og:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424793/641">
+<meta property="og:updated_time" content="2019-01-28T15:42:56.768Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习笔记（七）：GAN">
+<meta name="twitter:description" content="前言生成对抗网络（GAN）一经提出就风光无限，更是被Yann Lecun誉为“十年来机器学习领域最有趣的想法”。 GAN“左右互搏”的理念几乎众所周知，但正如卷积神经网络（CNN）一样，GAN发展至今已经衍生出了诸多变化形态。 今天，文摘菌就来为大家盘点一下GAN大家庭中各具特色的成员们。 他们的名单如下： 1.DCGANs 2.Improved DCGANs 3.Conditional GANs">
+<meta name="twitter:image" content="https://inews.gtimg.com/newsapp_bt/0/2409424777/641">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiabanle.me/archives/e84feb7d.html">
+
+
+
+
+
+  <title>机器学习笔记（七）：GAN | Little Tail</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+  <script src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?0f0daeaed626293d9c84d4ebb98cb655";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-112810636-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Little Tail</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Berry's Blogs</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiabanle.me/archives/e84feb7d.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Berry">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Little Tail">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">机器学习笔记（七）：GAN</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-12T16:50:02+00:00">
+                2018-02-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/archives/e84feb7d.html" class="leancloud_visitors" data-flag-title="机器学习笔记（七）：GAN">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读量： </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  7,510
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  27
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>生成对抗网络（GAN）一经提出就风光无限，更是被Yann Lecun誉为“十年来机器学习领域最有趣的想法”。</p>
+<p>GAN“左右互搏”的理念几乎众所周知，但正如卷积神经网络（CNN）一样，GAN发展至今已经衍生出了诸多变化形态。</p>
+<p>今天，文摘菌就来为大家盘点一下GAN大家庭中各具特色的成员们。</p>
+<p>他们的名单如下：</p>
+<p>1.DCGANs</p>
+<p>2.Improved DCGANs</p>
+<p>3.Conditional GANs</p>
+<p>4.InfoGANs</p>
+<p>5.Wasserstein GANs</p>
+<p>6.Improved WGANs</p>
+<p>7.BEGANs</p>
+<p>8.ProGANs</p>
+<p>9.CycleGANs</p>
+<p>注意，这篇文章不会包含以下内容</p>
+<p>•   复杂的技术分析</p>
+<p>•   代码（但有代码链接）</p>
+<p>•   详细的研究清单</p>
+<p>（你可以点击以下链接<a href="https://github.com/zhangqianhui/AdversarialNetsPapers）" target="_blank" rel="noopener">https://github.com/zhangqianhui/AdversarialNetsPapers）</a></p>
+<p>想要了解更多GANs相关内容的也可以留言告诉文摘菌哦～</p>
+<h1 id="GANs概论"><a href="#GANs概论" class="headerlink" title="GANs概论"></a>GANs概论</h1><p>如果你对GANs很熟悉的话，你可以跳过这部分的内容。</p>
+<p>GANs最早由Ian Goodfellow提出，由两个网络构成，一个生成器和一个鉴别器。他们在同一时间训练并且在极小化极大算法（minimax）中进行竞争。生成器被训练来欺骗鉴别器以产生逼真的图像，鉴别器则在训练中学会不被生成器愚弄。</p>
+<h2 id="GAN-训练原理概览"><a href="#GAN-训练原理概览" class="headerlink" title="GAN 训练原理概览"></a>GAN 训练原理概览</h2><p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424777/641" alt=""></p>
+<p>首先，生成器通过从一个简单分布（例如正态分布）中抽取一个噪音向量Z，并且上行采样（upsample）这个向量来生成图像。在最初的循环中，这些图像看起来非常嘈杂。然后，鉴别器得到真伪图像并学习去识别它们。随后生成器通过反向传播算法（backpropagation）收到鉴别器的反馈，渐渐在生成图像时做得更好。我们最终希望伪图像的分布尽可能地接近真图像。或者，简单来说，我们想要伪图像尽可能看起来像真的一样。 </p>
+<p>值得一提的是，因为GANs是用极小化极大算法做优化的，所以训练过程可能会很不稳定。不过你可以使用一些“小技巧”来获得更稳健的训练过程。</p>
+<p>在下面这个视频中，你可以看到GANs所生成图片的训练演变过程。 </p>
+<embed type="video/mp4" allowscriptaccess="always" allowfullscreen="true" wmode="transparent" quality="high" height="490" width="490" src="http://p3nyp7kdl.bkt.clouddn.com/x051320l2ec.mp4">
+
+
+
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>如果对GANs的基本实现感兴趣，可以参见代码的链接：</p>
+<p>Tensorflow（<a href="https://github.com/ericjang/genadv_tutorial/blob/master/genadv1.ipynb）" target="_blank" rel="noopener">https://github.com/ericjang/genadv_tutorial/blob/master/genadv1.ipynb）</a></p>
+<p>Torch 和 Python (PyTorch)（<a href="https://github.com/devnag/pytorch-generative-adversarial-networks；https://medium.com/@devnag/generative-adversarial-networks-gans-in-50-lines-of-code-pytorch-e81b79659e3f）" target="_blank" rel="noopener">https://github.com/devnag/pytorch-generative-adversarial-networks；https://medium.com/@devnag/generative-adversarial-networks-gans-in-50-lines-of-code-pytorch-e81b79659e3f）</a></p>
+<p>Torch 和 Lua（<a href="https://github.com/lopezpaz/metal）" target="_blank" rel="noopener">https://github.com/lopezpaz/metal）</a></p>
+<p>虽然这些不是最前沿的内容，但它们对于掌握理念很有帮助。</p>
+<p>接下来我将按照粗略的时间顺序描述最近这些年来出现的GANs相关的一些进展和类型。</p>
+<h1 id="深度卷积生成式对抗网络（Deep-Convolutional-GANs-DCGANs）"><a href="#深度卷积生成式对抗网络（Deep-Convolutional-GANs-DCGANs）" class="headerlink" title="深度卷积生成式对抗网络（Deep Convolutional GANs, DCGANs）"></a>深度卷积生成式对抗网络（Deep Convolutional GANs, DCGANs）</h1><p>DCGANs是GAN结构的最早的重要发展。就训练和生成更高质量的样本来说，DCGANs更加稳定。</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1511.06434" target="_blank" rel="noopener">https://arxiv.org/abs/1511.06434</a></p>
+<p>DCGAN的作者们专注于提升初代GAN的框架结构。他们发现：</p>
+<p>批次（Batch）的正态化在两个网络中都是必须要做的。</p>
+<p>完全隐藏的连接层不是一个好的想法。</p>
+<p>避免池化，只需卷积</p>
+<p>修正线性单元（ReLU）激活函数非常有用。</p>
+<p>DCGANs截至目前任然被时常提起，因为它们成为了实践和使用GANs的主要基准之一。</p>
+<p>在这篇论文发布后不久，就在Theano, Torch, Tensorflow 和 Chainer 中出现了不同的可使用的实现方法，这些方法可以在你感兴趣的任何数据集上测试。所以，如果你遇到了生成后奇怪的数据集，你完全可以归咎于这些家伙。</p>
+<h2 id="DCGANs的使用场景如下："><a href="#DCGANs的使用场景如下：" class="headerlink" title="DCGANs的使用场景如下："></a>DCGANs的使用场景如下：</h2><p>你想要比基础GANs表现更好（这是必须的）。基础GANs适用于简单的数据集，然而DCGANs比这要强得多。</p>
+<p>你在寻找一种稳固的基准方法来比较你的新GAN算法。</p>
+<p>从现在开始，除非特别说明，我接下来将要描述的所有GANs的类型都被假定为有DCGAN的结构。</p>
+<h1 id="提升深度卷积生成式对抗网络（Improved-DCGANs）"><a href="#提升深度卷积生成式对抗网络（Improved-DCGANs）" class="headerlink" title="提升深度卷积生成式对抗网络（Improved DCGANs）"></a>提升深度卷积生成式对抗网络（Improved DCGANs）</h1><p>一系列提升先前的DCGAN的技术。例如，这一提升后的基准方法能够生成更好的高分辨率图像。</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1606.03498" target="_blank" rel="noopener">https://arxiv.org/abs/1606.03498</a></p>
+<p>GANs的主要问题之一是收敛性。收敛性不是一定的，而且尽管DCGAN做了结构细化，训练过程仍可能非常不稳定。</p>
+<p>在这篇论文里，作者们针对GAN训练过程提出了不同的增强方法。以下是其中一部分：</p>
+<p>特征匹配：他们提出了一种新的目标函数，而不是让生成器尽可能地去蒙骗鉴别器。这个目标函数需要生成器生成的数据能够跟真实数据的统计量相匹配。在这种情况下，鉴别器只被用来指定哪些才是值得去匹配的统计量。</p>
+<p>历史平均：在更新参数值时，把它们过去的值也纳入考虑。</p>
+<p>单侧标签平滑：这一项非常简单：只要把你的鉴别器的目标输出值从[0=假图像，1=真图像]改成[0=假图像，0.9=真图像]。不错，这样就提升了训练效果。</p>
+<p>虚拟批次正态化：通过使用从其他批次计算的统计量来避免依赖于同一批次的数据。这样的计算成本很高，所以它仅仅被用在生成器当中。</p>
+<p>所有这些技术都使得模型在生成高分辨率图像时能表现得更好，而这正是GANs的弱项之一。</p>
+<p>作为对比，请看在128x128图像上原始DCGAN和提升后的DCGAN的表现差异：</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424778/641" alt=""></p>
+<p>这些本来都是狗的图片。正如你看到的，DCGAN表现很糟糕，而用improved DCGAN你至少可以看到一些包含狗的特征的内容。这也说明了GANs的另一局限——生成结构性的内容。</p>
+<h2 id="Improved-DCGANs的使用场景如下"><a href="#Improved-DCGANs的使用场景如下" class="headerlink" title="Improved DCGANs的使用场景如下"></a>Improved DCGANs的使用场景如下</h2><p>生成更高分辨率的图像</p>
+<h1 id="条件生成式对抗网络（Conditional-GANs，-cGANs"><a href="#条件生成式对抗网络（Conditional-GANs，-cGANs" class="headerlink" title="条件生成式对抗网络（Conditional GANs， cGANs)"></a>条件生成式对抗网络（Conditional GANs， cGANs)</h1><p>条件式生成式对抗网络使用额外的标签信息用于生成更高质量图片，并且使图片的呈现可控制。</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1411.1784" target="_blank" rel="noopener">https://arxiv.org/abs/1411.1784</a></p>
+<p>CGANs是GAN框架的扩展。我们用条件信息Y来描述数据的某些特征。假设我们要处理面部图像，Y则可以用来描述头发颜色或者性别。然后这些属性被插入生成器和鉴别器。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424779/641" alt=""></p>
+<p>使用脸部特征信息的条件生成网络如上图所示</p>
+<p>条件式生成对抗网络有两个很有意思的地方：</p>
+<p>1、随着你不断给模型提供更多信息，GAN学习探索这些信息，然后产生更好的样本。</p>
+<p>2、我们用两种方法来控制图片的呈现，在没有CGAN的时候所有图片信息使用Z编码。在CGAN下，我们加入了条件信息Y，于是Z和Y对不同信息进行编码。</p>
+<p>例如，我们假设Y对手写数字0-9进行编码。Z对其他变量编码，这些变量可以是数字的风格比如（大小，粗细，旋转角度等。）</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424780/641" alt=""></p>
+<p>MNIST(Mixed National Institute of Standards and Technology database,简单机器视觉数据集)样本中Z和Y的区别如上图。Z是行，Y是列；Z对数字的风格编码，Y对数字本身编码。</p>
+<h1 id="最近的研究成果"><a href="#最近的研究成果" class="headerlink" title="最近的研究成果"></a>最近的研究成果</h1><p>在这个领域有很多有趣的文章，我介绍2个：</p>
+<p>1、使用生成对抗网络学习在指定位置画画</p>
+<p>（论文：<a href="https://arxiv.org/abs/1610.02454；代码：https://github.com/reedscot/nips2016）：这篇论文里作者设计了一个本文描述的方法来告诉GAN画什么，同时使用方框和标记告诉GAN绘画主体的位置。如下图示：" target="_blank" rel="noopener">https://arxiv.org/abs/1610.02454；代码：https://github.com/reedscot/nips2016）：这篇论文里作者设计了一个本文描述的方法来告诉GAN画什么，同时使用方框和标记告诉GAN绘画主体的位置。如下图示：</a></p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424781/641" alt=""></p>
+<p>堆栈式GAN</p>
+<p>（原文：<a href="https://arxiv.org/abs/1612.03242；代码：https://github.com/hanzhanggit/StackGAN）" target="_blank" rel="noopener">https://arxiv.org/abs/1612.03242；代码：https://github.com/hanzhanggit/StackGAN）</a></p>
+<p>这篇文章和上一篇比较类似，这里作者同时使用2个GAN网络（阶段1和阶段2）用于提升图片的质量。第1阶段用来获得包含图片“基本”概念的低分辨率图片。第2阶段用更多的细节和更高的分辨率提炼第1阶段的图片。</p>
+<p>这篇文章据我所知是生成高质量图片最好的模型之一，不信请看下图。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424782/641" alt=""></p>
+<h1 id="条件式生成网络的使用场景如下："><a href="#条件式生成网络的使用场景如下：" class="headerlink" title="条件式生成网络的使用场景如下："></a>条件式生成网络的使用场景如下：</h1><p>1、你有一个带标签的训练集，想提高生成图片的质量</p>
+<p>2、你想对图片的某些特征进行精细的控制，比如在某个设定的位置生成特定大小的一只红色小鸟。</p>
+<h1 id="最大信息化生成对抗网络（InfoGANs）"><a href="#最大信息化生成对抗网络（InfoGANs）" class="headerlink" title="最大信息化生成对抗网络（InfoGANs）"></a>最大信息化生成对抗网络（InfoGANs）</h1><p>GANs可以在无监督模式下对噪声向量Z的一部分有意义的图像特征进行编码。比如对某一数字的旋转编码。</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1606.03657" target="_blank" rel="noopener">https://arxiv.org/abs/1606.03657</a></p>
+<p>你是否曾想过GAN里输入噪声Z对哪些信息进行编码？一般来说它对图片的不同类型的特征使用一种非常“嘈杂”的方式编码。例如，取Z向量的一个位置 并且插入一个-1到1之间的值。这是下图所示的MNIST数据集的训练模型。</p>
+<p>左上图像是对Z插值取-1的时候，右下是插值为1的时候</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424783/641" alt=""></p>
+<p>上图中，生成的图片看似是从4慢慢变成“Y”（很像是4和9的混合体）。</p>
+<p>这就是我之前所说的使用一种“嘈杂”的方式进行编码：Z的一个位置是图像多个特征的一个参数。</p>
+<p>这种情况下，这个位置改变了数字自己（某种程度，从4变成9）和他的风格（从粗体变成斜体）。</p>
+<p>然而，你无法定义Z的位置的确切含义。</p>
+<p>如果使用Z的一些位置来代表唯一且受限的信息，正如CGAN里的条件信息Y呢？</p>
+<p>例如，第一个位置是0-9之间的数值来控制数字，第二个位置来控制数字的旋转，这就是文中作者想要表达的。</p>
+<p>有意思的是，与CGANS不同，他们使用无监督的方法实现并不需要标签信息。</p>
+<p>他们是这么做的，把Z向量拆分成两部分：C和Z</p>
+<p>C对数据分布的语义特征进行编码</p>
+<p>Z对分布的所有非结构化噪声进行编码</p>
+<p>如何用C对这些特征编码呢？</p>
+<p>通过改变损失函数避免C被GAN简单地忽略掉。所以他们使用一种信息论正则化确保C与生成器分布之间的互信息[z1] （mutual information）。</p>
+<p>也就是说，如果C变化，生成的图像也会变化。这导致你不能明确的控制什么类型的信息将被引入C中。但是C的每一个位置都有独特的含义。</p>
+<p>如下图所示：</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424784/641" alt=""></p>
+<p>C的第一位置编码数字的类别，第二位置编码旋转方向。</p>
+<p>然而，不使用标签信息的代价是，这些编码仅对非常简单的数据集有效比如MNIST库里的数字。</p>
+<p>并且，你还需要手工设定C的每个位置。例如文章中作者需要定义C的第一位置是介于0-9的整数以对应数据集的十类数字。你会认为这样不是百分百的无监督，因为需要手动给模型提供一些细节。</p>
+<p>你可能需要用到infoGANs的场景如下：</p>
+<p>1、数据集不太复杂</p>
+<p>2、你想训练一个CGAN模型但是缺少标签信息</p>
+<p>3、你想知道数据集主要有意义的图像特征并且对他们进行控制</p>
+<h1 id="生成式对抗网络（Wasserstein-GANs）"><a href="#生成式对抗网络（Wasserstein-GANs）" class="headerlink" title="生成式对抗网络（Wasserstein GANs）"></a>生成式对抗网络（Wasserstein GANs）</h1><p>修改损失函数以引入Wasserstein距离，这样以来WassGANs 的损失函数同图片质量建立联系。同时训练的稳定性有所提升而并非依赖于架构。</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1701.07875" target="_blank" rel="noopener">https://arxiv.org/abs/1701.07875</a></p>
+<p>GANs 经常存在收敛问题，所以你并不知道什么时候该停止训练。换句话说损失函数同图像质量无关，这可是个大难题。</p>
+<p>因为：</p>
+<p>你需要不断的查看样本来确认模型训练是否正确</p>
+<p>因为不收敛，你不知道何时该停止训练</p>
+<p>也没有数值指示你调参的效果如何</p>
+<p>举个例子，看下面DCGAN的两个无信息损失函数完美的生成MNIST样本的迭代图[z2] </p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424786/641" alt=""></p>
+<p>仅看上图你知道什么时候该停止训练吗？</p>
+<p>这种可解释性的问题也是Wasserstein GANs要解决的。</p>
+<p>怎样解决呢？</p>
+<p>如果真实和伪造样本的分布不重叠（一般都是这样）GANs可以用来最小化JS散度(Jensen-Shannon divergence)直到0。</p>
+<p>所以与其最小化JS散度，作者使用Wasserstein距离来描述不同分布中点之间的距离。</p>
+<p>思路大概如此，如果你想了解更多，我强烈建议你看这篇文章（<a href="https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7）或者更深入分析或者阅读本论文。" target="_blank" rel="noopener">https://paper.dropbox.com/doc/Wasserstein-GAN-GvU0p2V9ThzdwY3BbhoP7）或者更深入分析或者阅读本论文。</a></p>
+<p>WassGAN有和图像质量关联的损失函数并且能够收敛。同时他更加稳定而不依赖GAN的结构。比如，就算你去掉批标准化或者使用怪异的结构，它仍能很好的工作。 </p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424787/641" alt=""></p>
+<p>这就是他的损失函数图，损失越低，图像质量越好。完美！</p>
+<p>Wasserstein GANs的应用场景如下：</p>
+<p>你需要寻找最先进的且有最高训练稳定性的GAN</p>
+<p>你想要一个有信息量且可以解读的损失函数。</p>
+<h1 id="加强版WGANs-Improved-WGANs-WGAN-GP"><a href="#加强版WGANs-Improved-WGANs-WGAN-GP" class="headerlink" title="加强版WGANs (Improved WGANs , WGAN-GP)"></a>加强版WGANs (Improved WGANs , WGAN-GP)</h1><p>这个模型使用的是Wasserstein GANs，并应用了梯度惩罚（gradient penalty）来代替权重剪辑（weight clipping）及其带来的一些不需要的行为。这个方法可以带来更高的聚合度、更高质量的样本和更稳定的训练。</p>
+<p>论文：<a href="https://arxiv.org/abs/1704.00028" target="_blank" rel="noopener">https://arxiv.org/abs/1704.00028</a></p>
+<p>代码：<a href="https://github.com/igul222/improved_wgan_training" target="_blank" rel="noopener">https://github.com/igul222/improved_wgan_training</a></p>
+<p>针对问题：WGANs有时候会生成一些质量不佳的样本，或者是无法在某些集合中生成聚集。这种现象主要是由于为了满足Lipschitz限制而在WGANs中应用权重剪辑（即把所有权重限制在一个由最小值和最大值组成的范围内）所造成的。如果你对这个限制不太了解，那么你只需要记住它是WGANs正常运行的一个必要条件。那么为什么权重剪辑会造成如上问题呢？这是因为它会使WGANs偏向于使用那些过于简单的函数，这意味着当WGANs想要模拟复杂的数据时，简单地估算近似值令其无法得到准确的结果（如下图所示）。另外，权重剪辑也使得梯度爆炸与消失更容易发生。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424788/641" alt=""></p>
+<p> 左图是使用了简单的函数导致无法正确模拟高斯为8的WGANs运行后的结果，而右图则是经过使用了更复杂的函数的WGAN-GP矫正后的图像。</p>
+<p>梯度惩罚（Gradient penalty）：所以我们该如何摆脱权重剪辑带来的不良效果呢？</p>
+<p>WGAN-GP的作者（GP表示梯度惩罚）提出了使用另一种叫梯度惩罚的办法来加强Lipschitz限制的建议。原则上，梯度惩罚的原理是对某些梯度实行了均值为1的限制。对于那些均值偏离于1的梯度将会实施惩罚（减少权重），这也是为什么它被称为梯度惩罚的原因。</p>
+<p>优点：由于在训练中使用了梯度惩罚而不是权重剪辑，WGANs获得了更快的聚合。另外，因为不再必须对超参数进行调整，而且网络架构的使用也不再像之前那么重要，训练在某种程度上变得更加稳定。虽然很难说清楚到底有多少，但这些WGAN-GP确实产生了更高质量的样本。在已验证并测试的结构上，这些样本的质量和作为基线的WGANs产出的结果非常相似。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424789/641" alt=""></p>
+<p>基于同一个网络架构，WGANs-GP明显在生成高质量样本上更有优势，而GANs则不然。</p>
+<p>比如，据作者所知，这是首次GANs能够在残差网络的结构上运行：</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424790/641" alt=""></p>
+<p>为了不超出本篇博文的范畴，还有许多其他有趣的细节我这里就不一一阐述了。如果你对这个训练方式有兴趣想要了解更多（例如，为什么梯度惩罚只应用于“某些”特定梯度，又或者怎样才能把这个模型用于文本数据样本），我会建议你自行阅读一下该论文。</p>
+<p>强化版的WGAN的优点如下：</p>
+<p>l  更快的聚合</p>
+<p>l  可以在各种各样的网络架构和数据集中使用</p>
+<p>l  不像其他的GANs一样需要太多的超参数调整</p>
+<h1 id="边界均衡GANs-Boundary-Equilibrium-GANs，BEGANs"><a href="#边界均衡GANs-Boundary-Equilibrium-GANs，BEGANs" class="headerlink" title="边界均衡GANs(Boundary Equilibrium GANs，BEGANs)"></a>边界均衡GANs(Boundary Equilibrium GANs，BEGANs)</h1><p>GANs使用一个自动编码器作为均衡判别器。它们可在一个简单的架构上被训练出来，且合成一个动态的可以使得均衡器和生成器在训练中两者平衡的阶段。</p>
+<p>论文：<a href="https://arxiv.org/abs/1703.10717" target="_blank" rel="noopener">https://arxiv.org/abs/1703.10717</a></p>
+<p>一个有趣的事实：BEGANs 和WGAN-GP几乎是同一天在论文上发表。</p>
+<p>理念：让BEGAN区别于其他GANs的原因有两个，一是它们使用了一个自动编码器作为均衡判别器（这一点和EBGANs类似），二是为了适用于这个情境的一个特别的损失函数。这种选择背后的理由是什么呢？强迫我们使用像素重建损失函数来制造模糊生成样本的自动编码器是否也不是传说中那么“邪恶”呢？</p>
+<p>要回答这些问题，我们需要考虑以下两点：</p>
+<ol>
+<li><p>为什么要重建像素损失？作者解释说这么做的原因是，对于那些符合对像素损失的重建分布模式的假设，我们可以依赖它们去匹配样本的分布模式。</p>
+</li>
+<li><p>而这又引出了下一个问题：如何才可以达到这一目的呢？一个重要的观点是，从自动编码器/均衡判别器形成的像素重建损失（换言之，就是基于某个图像输入，输出最优化的像素重建）并不是经BEGANs最小化后生成的最终损失。可以说，这个重建损失不过是为了计算最终损失的其中一个步骤。而最终损失的计算这是通过衡量基于真实数据的重建损失和基于生成数据的重建损失之间的Wasserstein距离（是的，现在它无处不在）。</p>
+</li>
+</ol>
+<p>这么一看似乎这其中的信息量非常大，但我可以保证，一旦我们看清损失函数是如何作用于生成器和判别器，这一切将会变得再明白不过了。</p>
+<p>生成器专注于生成那些能够让判别器良好重建的图像</p>
+<p>而判别器则致力于尽可能良好地重建真实图像，同时重建那些误差最大化的生成图像。 </p>
+<p>差异因数：另一个有趣的成分是所谓的差异因数。通过这个因子你能控制判别器不同程度的表现，决定它能只专注于形成对真实图像的完美重建（注重质量），又或是更侧重在区分真实图像和生成图像（注重多样性）。然后，它们就能更进一步地利用这个差异因数去保持生成器和判别器在训练中的平衡。如同WGANs,这一模型同样应用均衡状态作为调整和图像质量相关的聚合度的方法。然而，和WGANs (与 WGANs-GP)不尽相同的是，它们利用了Wasserstein 距离，而非Lipschitz限制，去测量均衡水平。</p>
+<p>结论：BEGANs并不需要任何花里胡哨的网络架构就可以训练得当。如同在论文中所述的，“不批量标准化，不丢弃神经网络元，无反卷积，也没有卷积滤镜的指数化增长”，这些生成样本(128x128)的质量已经相当好了。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424791/641" alt=""></p>
+<p>然而，在这篇论文中有一个重要的细节值得我们注意：论文中使用的未发表数据集的样本量是目前广为使用的 CelebA数据集的两倍之大。因此，为了得到更具有现实意义的定性比较，我邀请大家去查看那些使用了CelebA的公开模型（<a href="https://github.com/carpedm20/BEGAN-tensorflow），并看看那些由此生成的样本。" target="_blank" rel="noopener">https://github.com/carpedm20/BEGAN-tensorflow），并看看那些由此生成的样本。</a></p>
+<p>最后，如果你对BEGANs感兴趣想要了解更多，我建议你阅读一下这篇博文（<a href="https://blog.heuritech.com/2017/04/11/began-state-of-the-art-generation-of-faces-with-generative-adversarial-networks/），里面对BEGANs有更多详细的介绍。" target="_blank" rel="noopener">https://blog.heuritech.com/2017/04/11/began-state-of-the-art-generation-of-faces-with-generative-adversarial-networks/），里面对BEGANs有更多详细的介绍。</a></p>
+<p>你需要BEGANs的原因一般会和需要使用WGANs-GP的情况差不多。这两个模型的结果往往非常相似（稳定的训练、简单的架构、和图像质量相关的损失函数），而两者的不同主要在于过程中使用的手段。由于评估生成式模型本身就不是一件容易的事，我们很难去说清楚孰优孰劣。但就像Theisetal在他们的论文（<a href="https://arxiv.org/abs/1511.01844）中所说的，选择一个评估的方法，不然就依据实际情况来做判定。在这种情况下，WGANs-GP具有更高的初始分数（Inception" target="_blank" rel="noopener">https://arxiv.org/abs/1511.01844）中所说的，选择一个评估的方法，不然就依据实际情况来做判定。在这种情况下，WGANs-GP具有更高的初始分数（Inception</a> score）而BEGANs则能生成非常优质的图像，两者都是未来最值得研究和最具有革新意义的模型。</p>
+<h1 id="渐进式发展生成对抗网络（Progressive-growing-of-GANs，ProGANs）"><a href="#渐进式发展生成对抗网络（Progressive-growing-of-GANs，ProGANs）" class="headerlink" title="渐进式发展生成对抗网络（Progressive growing of GANs，ProGANs）"></a>渐进式发展生成对抗网络（Progressive growing of GANs，ProGANs）</h1><p>在训练过程中,逐步嵌入新的高分辨率的层次，来生成相当逼真的图像。更多的进步以及新兴的考核机制也相继涌现。新生成的图片质量高得惊人。</p>
+<p>论文：<a href="https://arxiv.org/abs/1710.10196" target="_blank" rel="noopener">https://arxiv.org/abs/1710.10196</a></p>
+<p>代码：<a href="https://github.com/tkarras/progressive_growing_of_gans" target="_blank" rel="noopener">https://github.com/tkarras/progressive_growing_of_gans</a></p>
+<p>生成高分辨率的图像是个大挑战。图片越大，对生成对抗网络来说越可能失败。因为它要求模型学习辨别更细微、复杂的细节。为了使大家更好理解，在这篇文章发表之前，GANs产出图像的合理尺寸大概是256x256。渐进式生成对抗网络（ProGANs）将它提升到了一个全新水准-生成尺寸为1024x1024的图片。我们来看看它是如何实现的：</p>
+<p>理念: ProGANs-建立于WFGANs-GP-引入了一种灵活地将新层次逐渐嵌入到训练时间的方式。每一层都利用上采样增强了生成器和判别器里的图像分辨率。</p>
+<p>步骤分解如下：</p>
+<p>1 首先，利用低像素图片训练生成器和判别器。</p>
+<p>2 在一定时间点（开始聚合的时候），提高分辨率。这是通过“迁移阶段”/“平滑技术”非常完美地实现的。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424792/641" alt=""></p>
+<p>新的层次是借助α控制的一系列细微的线性步骤添加，而不是简单粗暴地加上一层。</p>
+<p>我们看看生成器里都发生了什么。最初，当α = 0，无变化。产出主要来自于前一低分辨率层（16x16）的贡献。</p>
+<p>当提升α的值，新一层（32x32）开始通过反向传播调整它的权重。最后，当α趋近于1，我们几乎可以跳过32x32这一层的操作。同理适用于判别器，当然是以完全相反的方式：不是使图片更大，而是更小。</p>
+<p>3 一旦转化完成，继续训练生成器与判别器。假如得到的图片质量分辨率不达标，请回到步骤2。</p>
+<p>不过，等等……对新的高分辨率图像的上采样与串联不是已经在StackGANs（还有新StackGANs++）里实现了么？没错，也不全对。首先，StackGANs是将文字翻译为图像的条件GANs，它引入文字描述作为额外输入值。而ProGANs没有使用任何假定式的信息。更加有趣的是，尽管StackGANs和ProGANs都对更高分辨率的图片串联，StackGANs需要尽量多的根据上采样独立配对的GANs-需单独训练，你想进行上采样3次么？那你要训练3个GANs。另一方面，在ProGANs模型中只有一个单一的GAN被训练。在这一训练中，更多的上采样层被逐步叠加至上采样的图片，上采样3次的尝试只是增加更多的层在训练时间上，而不是抓3个新的GANs逐次训练。总而言之，ProGANs采用一种与StackGANs相似的理念，它完美地完成，而且在没有额外信息的情况下产出更好的结果。</p>
+<p>结果。作为渐进训练的结果，ProGANs生成的图片有更高的质量，而针对1024x1024图像的训练时间也缩减了5.4倍。背后的理由是，ProGAN不需要一次性学习所有大、小规模的典型图片。在ProGAN模型里，小规模的图像最先被学习（低分辨率层次聚合），然后模型可以自行聚焦在完善大尺寸图片的结构上（新的高分辨率层次聚合）。</p>
+<p>其他的提升。</p>
+<p>另外，该论文提出了新的设计决策来更进一步提升模型的性能。概述如下：</p>
+<p>小批量标准差：将标准差运用于这些小批量的所有特征属性，允许每个小批量有相似的统计数据。然后，总结为一个新的层的单一值，嵌入至网络尾端。</p>
+<p>均衡的学习速率：通过在训练过程中持续地将每个权重除以一个常量，确保所有权重的学习速度一致。</p>
+<p>像素标准化：在生成器上，每一个矢量的特征是根据其卷基层标准化的（论文里的精确公式）。这是为了防止生成器和判别器的梯度量级的逐步上涨。</p>
+<p>CelebA-HQ（CelebA高级版）。 值得一提的是，作者为了实现高分辨率训练，改进了原始的CelebA，从而得到了CelebA-HQ，简单来说，它们移除原像，应用高斯滤波器来生成一种景深效果，然后探测到人脸图像，得到一个1024x1024尺寸的裁剪图片，在这一流程之后，他们从202k张图片里保留了最优质的30k张图片。</p>
+<h1 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h1><p>最后，我们介绍一种新的评估方式：</p>
+<p>背后的理念是：生成图像的本地图形结构应该与训练图像的结构匹配。</p>
+<p>那么如何测量本地结构？</p>
+<p>使用Laplacian pyramid算法，你可以得到不同的空间频段，来作为描述符。</p>
+<p>最后，我们从生成图像和原始图像中提取描述符，将其规范化，然后使用著名的Wasserstein距离检测它们有多接近。距离越近越好。</p>
+<p>你可能会想在以下场景使用ProGANs的使用场景如下：</p>
+<p>假如你希望获得最完美的结果。但是考虑到…</p>
+<p>你需要花大量时间搭建模型：我们需要在一个单一的NVIDIA Tesla P100 GPU上花20天训练网络</p>
+<p>如果你开始怀疑世界的真实性。GANs的下一轮迭代可能会给你一些比现实生活还真实的样本参考。</p>
+<h1 id="循环生成对抗网络（Cycle-GANs）"><a href="#循环生成对抗网络（Cycle-GANs）" class="headerlink" title="循环生成对抗网络（Cycle GANs）"></a>循环生成对抗网络（Cycle GANs）</h1><p>论文：<a href="https://arxiv.org/pdf/1703.10593.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1703.10593.pdf</a></p>
+<p>​</p>
+<p>代码：<a href="https://github.com/junyanz/CycleGAN" target="_blank" rel="noopener">https://github.com/junyanz/CycleGAN</a></p>
+<p>循环GANs是目前最先进的用于图片互译的生成对抗网络。</p>
+<p><img src="https://inews.gtimg.com/newsapp_bt/0/2409424793/641" alt=""></p>
+<p>这些GANs并不需要配对的数据集来学习不同领域之间的转译，这点很棒，因为配对数据集很难获取。然而CycleGANs仍然需要通过两个不同领域的数据X和Y（例如X是普通的马匹，Y是斑马）来训练。为了将转换限制于从一个领域到另一领域的范畴，他们使用所谓的“循环一致性损失”。大意是，如果可以将马匹A转化成斑马A，那么当你将斑马A逆转化，应该能得到马匹A才对。</p>
+<p>这种从一个领域到另一领域的变换与另一热门概念“神经风格转换”是有区别的。后者结合了一副图像的“内容”与另一图像的“样式”。循环GANs则是在一个领域转换至另一领域的过程中学习总结非常高层次的特征。因此，循环GANs更笼统，并且适用于多种映射关系，例如将一个速写转化为真实物品。 </p>
+<p>总结一下，生成对抗网络在近期取得了两大显著进步：</p>
+<p>WGANS-GP和BEGANs</p>
+<p>尽管理论研究方向不同，但它们提供了相似的优点。其次，我们有ProGANs（基于WGANS-GP），它打开了一条通往生成高清图像的清晰路径。同时，循环GANs让我们看到了GANs从数据集提取有用信息的潜力以及这些信息如何转入至另一非关联的数据分布。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        
+  
+<div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>很惭愧，只是做了一点微小的工作:)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span><smaller>Donate</smaller></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WxQRCode.png" alt="Berry WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliQRCode.png" alt="Berry Alipay">
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+
+      </div>
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Berry
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://xiabanle.me/archives/e84feb7d.html" title="机器学习笔记（七）：GAN">http://xiabanle.me/archives/e84feb7d.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/2bae0a51.html" rel="next" title="剑指offer（四）：7-13">
+                <i class="fa fa-chevron-left"></i> 剑指offer（四）：7-13
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/e26fa12f.html" rel="prev" title="剑指offer（五）：14-18">
+                剑指offer（五）：14-18 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_gmail"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_pocket"></a>
+  <a class="jiathis_button_reddit"></a>
+  <!--<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>-->
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    shortUrl:true,
+    hideMore:true
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Berry">
+          <p class="site-author-name" itemprop="name">Berry</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yuyukuang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/yu-yu-69-99-39/activities" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Zhihu
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5198381591" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Others
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://foreti.me/" title="Mr.Right" target="_blank">Mr.Right</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+      
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GANs概论"><span class="nav-number">2.</span> <span class="nav-text">GANs概论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GAN-训练原理概览"><span class="nav-number">2.1.</span> <span class="nav-text">GAN 训练原理概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深度卷积生成式对抗网络（Deep-Convolutional-GANs-DCGANs）"><span class="nav-number">3.</span> <span class="nav-text">深度卷积生成式对抗网络（Deep Convolutional GANs, DCGANs）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DCGANs的使用场景如下："><span class="nav-number">3.1.</span> <span class="nav-text">DCGANs的使用场景如下：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提升深度卷积生成式对抗网络（Improved-DCGANs）"><span class="nav-number">4.</span> <span class="nav-text">提升深度卷积生成式对抗网络（Improved DCGANs）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Improved-DCGANs的使用场景如下"><span class="nav-number">4.1.</span> <span class="nav-text">Improved DCGANs的使用场景如下</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件生成式对抗网络（Conditional-GANs，-cGANs"><span class="nav-number">5.</span> <span class="nav-text">条件生成式对抗网络（Conditional GANs， cGANs)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最近的研究成果"><span class="nav-number">6.</span> <span class="nav-text">最近的研究成果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件式生成网络的使用场景如下："><span class="nav-number">7.</span> <span class="nav-text">条件式生成网络的使用场景如下：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最大信息化生成对抗网络（InfoGANs）"><span class="nav-number">8.</span> <span class="nav-text">最大信息化生成对抗网络（InfoGANs）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成式对抗网络（Wasserstein-GANs）"><span class="nav-number">9.</span> <span class="nav-text">生成式对抗网络（Wasserstein GANs）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加强版WGANs-Improved-WGANs-WGAN-GP"><span class="nav-number">10.</span> <span class="nav-text">加强版WGANs (Improved WGANs , WGAN-GP)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#边界均衡GANs-Boundary-Equilibrium-GANs，BEGANs"><span class="nav-number">11.</span> <span class="nav-text">边界均衡GANs(Boundary Equilibrium GANs，BEGANs)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渐进式发展生成对抗网络（Progressive-growing-of-GANs，ProGANs）"><span class="nav-number">12.</span> <span class="nav-text">渐进式发展生成对抗网络（Progressive growing of GANs，ProGANs）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#评估"><span class="nav-number">13.</span> <span class="nav-text">评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#循环生成对抗网络（Cycle-GANs）"><span class="nav-number">14.</span> <span class="nav-text">循环生成对抗网络（Cycle GANs）</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      <!--/noindex-->
+      
+	
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-paper-plane"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Berry</span>
+  <div class="theme-info">
+  <div class="powered-by"></div>
+  Source -
+  <a class="theme-link" href="https://github.com/kuangyuyu" rel="external nofollow">
+    Github
+  </a>
+  </div>
+</div>
+
+
+<div class="powered-by">
+  <span class="with-love"><i class="fa fa-eye"></i></span>
+  <span id="busuanzi_value_site_pv"></span>
+</div>
+<div class="powered-by">
+<span class="with-love"><i class="fa fa-user"></i></span>
+<span id="busuanzi_value_site_uv"></span>
+</div>
+
+<div class="theme-info">
+  <span class="post-count">博客全站共63.4k字</span>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe.min.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/photoswipe-ui-default.min.js?v=5.1.2"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'yuyukuang',
+            repo: 'yuyukuang.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '24f0c110e76adae44857d5d7102e3f1adc165659',
+            
+                client_id: '23956de71da002280330'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("mDclo4WLTcm4dNVtpl2oWUtw-gzGzoHsz", "E4XnzAo4x7eti6TsKzjmuPBC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!--移动端判断，是否引入DaoVoice-->
+<script>
+var browser={  
+    versions:function(){   
+           var u = navigator.userAgent, app = navigator.appVersion;   
+           return {//移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+            };  
+         }(),  
+         language:(navigator.browserLanguage || navigator.language).toLowerCase()  
+}   
+  if(browser.versions.mobile || browser.versions.ios || browser.versions.android ||   
+    browser.versions.iPhone || browser.versions.iPad){        
+             
+  }else{
+    
+
+  }
+</script>
+  
+</body>
+</html>

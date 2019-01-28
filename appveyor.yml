@@ -1,10 +1,5 @@
 clone_depth: 5
 
-# 这里是限制了只编译有源文件的分支，这样在创建了其它分支时就不会再次编译了
-branches:
-  only:
-  - master
-
 environment:
   access_token:
     secure: o37kjkEFd/FL6uE9HEvIeiKnyiZ3WEnRhDyuBBP0hRGtN1oYI7vERMRJ6Y3f59fo
@@ -18,6 +13,7 @@ install:
   - cnpm install hexo-cli -g
   - cnpm install --save hexo-generator-feed
   - cnpm install hexo-generator-sitemap --save
+  - cnpm install hexo-generator-feed --save
   - cnpm install hexo-abbrlink --save
   - cnpm install hexo-wordcount --save
   - cnpm install hexo-generator-searchdb --save
@@ -29,7 +25,7 @@ artifacts:
   - path: public
 
 on_success:
-  - git config --global credential.helper store
+    - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config --global user.email "%GIT_USER_EMAIL%"
   - git config --global user.name "%GIT_USER_NAME%"
@@ -39,4 +35,6 @@ on_success:
   - for /d %%p IN (*) do rmdir "%%p" /s /q
   - SETLOCAL EnableDelayedExpansion & robocopy "%APPVEYOR_BUILD_FOLDER%\public" "%TEMP%\static-site" /e & IF !ERRORLEVEL! EQU 1 (exit 0) ELSE (IF !ERRORLEVEL! EQU 3 (exit 0) ELSE (exit 1))
   - git add -A
-  - if "%APPVEYOR_REPO_BRANCH%"=="master" if not defined APPVEYOR_PULL_REQUEST_NUMBER (git diff --quiet --exit-code --cached || git commit -m "Update Static Site" && git push origin %TARGET_BRANCH% && appveyor AddMessage "Static Site Updated")
+  - git commit -m "Update Static Site"
+  - git push origin %TARGET_BRANCH%
+  - appveyor AddMessage "Static Site Updated"

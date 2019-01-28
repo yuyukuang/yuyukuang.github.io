@@ -7,7 +7,7 @@ branches:
 
 environment:
   access_token:
-    secure: MxwXke3+dxWZ8yn1Z74mm8U1huHh9qM1u9PJ8bJZiHjYD1ni8lLwYzENz7mwSeTj
+    secure: o37kjkEFd/FL6uE9HEvIeiKnyiZ3WEnRhDyuBBP0hRGtN1oYI7vERMRJ6Y3f59fo
 
 install:
   - ps: Install-Product node ''
